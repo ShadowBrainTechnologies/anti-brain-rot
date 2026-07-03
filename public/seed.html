@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seed Scores</title>
+<style>
+  body { font: 18px system-ui, sans-serif; max-width: 480px; margin: 60px auto; padding: 0 20px; color: #08060d; }
+  h1 { font-size: 28px; }
+  label { display: block; margin: 16px 0 4px; font-weight: 600; }
+  input { font: inherit; padding: 8px 12px; border: 1px solid #ccc; border-radius: 8px; width: 120px; box-sizing: border-box; }
+  button { margin-top: 20px; padding: 12px 28px; font: inherit; font-weight: 600; background: #aa3bff; color: #fff; border: none; border-radius: 10px; cursor: pointer; }
+  .done { color: #16a34a; font-weight: 600; margin-top: 12px; }
+  .hint { color: #6b6375; font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>Seed Your Best Times</h1>
+<p class="hint">Enter your solve times as MM:SS. Leave blank to skip.</p>
+<form id="f">
+  <label>Easy</label>
+  <input data-key="sudoku:easy" placeholder="6:46" value="6:46">
+  <label>Medium</label>
+  <input data-key="sudoku:medium" placeholder="MM:SS">
+  <label>Hard</label>
+  <input data-key="sudoku:hard" placeholder="MM:SS">
+  <label>Expert</label>
+  <input data-key="sudoku:expert" placeholder="MM:SS">
+  <hr style="margin:24px 0;border:none;border-top:1px solid #eee">
+  <label>Number Memory (best level reached)</label>
+  <input data-key="number-memory" placeholder="e.g. 12" type="number">
+  <button type="submit">Save &amp; Go to Sudoku</button>
+</form>
+<p id="msg" class="done" hidden></p>
+<script>
+  document.getElementById('f').addEventListener('submit', (e) => {
+    e.preventDefault();
+    let saved = 0;
+    document.querySelectorAll('input[data-key]').forEach(inp => {
+      const val = inp.value.trim();
+      if (!val) return;
+      let seconds;
+      if (inp.type === 'number') {
+        seconds = Number(val);
+      } else {
+        const [m, s] = val.split(':').map(Number);
+        seconds = (m || 0) * 60 + (s || 0);
+      }
+      if (seconds > 0) {
+        localStorage.setItem('brain-rot:best:' + inp.dataset.key, String(seconds));
+        saved++;
+      }
+    });
+    const msg = document.getElementById('msg');
+    msg.textContent = saved + ' score(s) saved! Redirecting...';
+    msg.hidden = false;
+    setTimeout(() => window.location.href = '/sudoku', 1000);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+.first-failure__panel {
+  max-width: 720px;
+}
+
+.first-failure__status {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--text-h);
+  min-height: 1.5em;
+}
+
+.first-failure__boxes {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.first-failure__box {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #2e303a;
+  border-radius: 10px;
+  background: #0f0f13;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.15s ease, border-color 0.15s ease,
+    opacity 0.15s ease;
+  padding: 0;
+  font: inherit;
+}
+
+.first-failure__box:hover:not(:disabled) {
+  transform: scale(1.06);
+}
+
+.first-failure__box:disabled {
+  cursor: default;
+}
+
+.first-failure__box-index {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  opacity: 0.65;
+}
+
+.first-failure__box-icon {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.first-failure__box--candidate {
+  border-color: var(--accent);
+  background: #1a1025;
+}
+
+.first-failure__box--recommended {
+  border-color: var(--accent);
+  background: #1a1025;
+  box-shadow: 0 0 0 3px var(--accent-bg);
+  animation: first-failure__pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes first-failure__pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+  50% {
+    box-shadow: 0 0 0 6px var(--accent-bg);
+  }
+}
+
+.first-failure__box--excluded {
+  opacity: 0.35;
+}
+
+.first-failure__box--pass {
+  background: #dcfce7;
+  border-color: #16a34a;
+  color: #14532d;
+}
+
+.first-failure__box--fail {
+  background: #fee2e2;
+  border-color: #dc2626;
+  color: #7f1d1d;
+}
+
+.first-failure__controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.btn--secondary {
+  background: var(--bg);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.btn--secondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (prefers-color-scheme: dark) {
+  .first-failure__box {
+    background: #000;
+    border-color: #2e303a;
+  }
+
+  .first-failure__box--candidate {
+    background: #1a1025;
+  }
+
+  .first-failure__box--recommended {
+    background: #1a1025;
+  }
+
+  .first-failure__box--pass {
+    background: #052e16;
+    border-color: #16a34a;
+    color: #86efac;
+  }
+
+  .first-failure__box--fail {
+    background: #450a0a;
+    border-color: #dc2626;
+    color: #fca5a5;
+  }
+}

@@ -1,0 +1,148 @@
+.panel--wide {
+  max-width: 480px;
+}
+
+.rps-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 20px;
+  border-radius: 20px;
+  border: 2px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.rps-prompt--blue {
+  background: rgba(37, 99, 235, 0.12);
+  border-color: #2563eb;
+}
+
+.rps-prompt--red {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: #dc2626;
+}
+
+.rps-prompt__emoji {
+  font-size: 56px;
+  line-height: 1;
+}
+
+.rps-prompt__label {
+  font-size: 28px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.rps-prompt__instruction {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.85;
+}
+
+.rps-options {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.rps-option {
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 8px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.rps-option:hover:not(:disabled) {
+  box-shadow: 0 0 0 4px var(--accent-bg);
+  border-color: var(--accent);
+}
+
+.rps-option:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.rps-option:disabled {
+  cursor: default;
+}
+
+.rps-option__emoji {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.rps-option__label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rps-option--correct {
+  border-color: #16a34a !important;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2) !important;
+}
+
+.rps-option--wrong {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.2) !important;
+}
+
+.rps-option--faded {
+  opacity: 0.45;
+}
+
+.timer {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.timer__bar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 100ms linear;
+}
+
+.timer__bar--urgent {
+  background: #dc2626;
+}
+
+.timer__text {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--text);
+  margin-top: -10px;
+}
+
+@media (max-width: 480px) {
+  .rps-prompt__emoji {
+    font-size: 44px;
+  }
+
+  .rps-prompt__label {
+    font-size: 22px;
+  }
+
+  .rps-option__emoji {
+    font-size: 28px;
+  }
+
+  .rps-option__label {
+    font-size: 11px;
+  }
+}

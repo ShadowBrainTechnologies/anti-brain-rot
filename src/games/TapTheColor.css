@@ -1,0 +1,129 @@
+.panel--wide {
+  max-width: 480px;
+}
+
+.sequence {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-height: 28px;
+}
+
+.sequence__dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sequence__dot--active {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 4px var(--accent-bg);
+  border-color: var(--accent);
+}
+
+.color-grid {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+}
+
+.color-grid--2 {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 340px;
+  margin: 0 auto;
+}
+
+.color-grid--3 {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.color-grid--4 {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.color-tile {
+  aspect-ratio: 1;
+  width: 100%;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  background: #9ca3af;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.color-tile:hover:not(:disabled) {
+  box-shadow: 0 0 0 4px var(--accent-bg);
+  border-color: var(--accent);
+}
+
+.color-tile:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.color-tile:disabled {
+  cursor: default;
+}
+
+.color-tile--correct {
+  border-color: #16a34a !important;
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.25) !important;
+}
+
+.color-tile--wrong {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.25) !important;
+}
+
+.timer {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.timer__bar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 100ms linear;
+}
+
+.timer__bar--urgent {
+  background: #dc2626;
+}
+
+.timer__text {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--text);
+  margin-top: -10px;
+}
+
+@media (max-width: 480px) {
+  .color-grid--2 {
+    max-width: 280px;
+    gap: 8px;
+  }
+
+  .color-grid--3 {
+    max-width: 320px;
+    gap: 8px;
+  }
+
+  .color-grid--4 {
+    max-width: 360px;
+    gap: 6px;
+  }
+
+  .sequence__dot {
+    width: 18px;
+    height: 18px;
+  }
+}

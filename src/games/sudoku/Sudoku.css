@@ -1,0 +1,383 @@
+.sudoku {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 24px 16px 40px;
+}
+
+.sudoku__controls {
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sudoku__diff {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.chip {
+  font: inherit;
+  font-size: 14px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.chip:hover {
+  color: var(--text-h);
+}
+
+.chip--active {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.sudoku__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sudoku__timer {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--text-h);
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+}
+
+.sudoku__new {
+  padding: 9px 18px;
+  font-size: 14px;
+}
+
+.sudoku__banner {
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.sudoku__banner--ok {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+}
+
+.sudoku__record {
+  color: #d97706;
+}
+
+.sudoku__best-inline {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.sudoku__best {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: #16a34a;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(22, 163, 74, 0.1);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+}
+
+/* --- Start screen --- */
+
+.sudoku__start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 48px 24px;
+  max-width: 480px;
+  margin: 40px auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.sudoku__title {
+  font-size: 34px;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.sudoku__desc {
+  color: var(--text);
+  line-height: 150%;
+  max-width: 36ch;
+  margin: 0;
+}
+
+.sudoku__diff--start {
+  width: 100%;
+  justify-content: center;
+}
+
+.sudoku__diff--start .chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 18px;
+}
+
+.chip__best {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.chip--active .chip__best {
+  opacity: 0.9;
+}
+
+.sudoku__start-btn {
+  padding: 14px 48px;
+  font-size: 18px;
+}
+
+.sudoku__board {
+  width: 100%;
+  max-width: 540px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--text-h);
+  border: 2px solid var(--text-h);
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.sudoku__box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  min-width: 0;
+}
+
+.cell {
+  font-family: var(--mono);
+  font-size: clamp(16px, 4.5vw, 24px);
+  text-align: center;
+  border: none;
+  color: var(--text-h);
+  background: var(--card-bg);
+  outline: none;
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  transition: background 0.1s ease;
+}
+
+/* --- Highlight layers (ordered low → high priority) --- */
+
+.cell--given {
+  font-weight: 700;
+  color: var(--text-h);
+  background: var(--code-bg);
+}
+
+.cell--peer {
+  background: rgba(170, 59, 255, 0.06);
+}
+
+.cell--same {
+  background: rgba(170, 59, 255, 0.22);
+  font-weight: 600;
+}
+
+.cell--conflict {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.14);
+}
+
+.cell--wrong {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.14);
+}
+
+.cell--sel {
+  background: var(--accent-bg);
+  box-shadow: inset 0 0 0 2px var(--accent);
+  z-index: 2;
+  position: relative;
+}
+
+/* Focus ring = same as sel for keyboard nav */
+.cell:focus {
+  box-shadow: inset 0 0 0 2px var(--accent);
+  z-index: 2;
+  position: relative;
+}
+
+.cell--given.cell--peer {
+  background: rgba(170, 59, 255, 0.06);
+}
+
+.cell--given.cell--same {
+  background: rgba(170, 59, 255, 0.22);
+}
+
+/* --- Number pad --- */
+
+.numpad {
+  width: 100%;
+  max-width: 540px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 6px;
+}
+
+.numpad__btn {
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 10px 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: background 0.12s ease, transform 0.08s ease, opacity 0.15s ease;
+}
+
+.numpad__btn:hover:not(:disabled) {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.numpad__btn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.numpad__btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.numpad__num {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-h);
+  line-height: 1;
+}
+
+.numpad__count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  line-height: 1;
+}
+
+.numpad__btn--done {
+  opacity: 0.35;
+}
+
+.numpad__btn--done .numpad__num {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  color: var(--text);
+}
+
+.numpad__btn--done .numpad__count {
+  opacity: 0.5;
+}
+
+.sudoku__hint {
+  font-size: 13px;
+  color: var(--text);
+  margin: 0;
+}
+
+/* --- Buttons --- */
+
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  transition: transform 0.08s ease, opacity 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn--ghost {
+  background: var(--card-bg);
+  color: var(--text-h);
+  border: 1px solid var(--border);
+  padding: 9px 18px;
+  font-size: 14px;
+}
+
+.btn--active {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 9px 18px;
+  font-size: 14px;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* --- Dark mode highlight tweaks --- */
+
+@media (prefers-color-scheme: dark) {
+  .cell--peer {
+    background: rgba(192, 132, 252, 0.08);
+  }
+
+  .cell--same {
+    background: rgba(192, 132, 252, 0.2);
+  }
+
+  .cell--given.cell--peer {
+    background: rgba(192, 132, 252, 0.08);
+  }
+
+  .cell--given.cell--same {
+    background: rgba(192, 132, 252, 0.2);
+  }
+}
