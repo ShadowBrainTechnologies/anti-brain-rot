@@ -5,6 +5,7 @@ import {
   DIFFICULTY,
   SESSION_SECONDS,
   optionsForRule,
+  generateOptions,
   answerFor,
   pickRule,
   switchThreshold,
@@ -116,8 +117,6 @@ export default function RuleSwitch() {
   }
 
   const startRound = (isFirst = false) => {
-    if (phaseRef.current !== 'playing') return
-
     let nextRule = ruleRef.current
     let switched = false
 
@@ -135,7 +134,7 @@ export default function RuleSwitch() {
     }
 
     const nextObject = generateObject(historyRef.current)
-    const nextOptions = optionsForRule(nextRule)
+    const nextOptions = generateOptions(nextObject, nextRule)
     const nextAnswer = answerFor(nextObject, nextRule)
 
     setObject(nextObject)
@@ -225,6 +224,7 @@ export default function RuleSwitch() {
   useEffect(() => {
     if (phase !== 'feedback') return
     const id = setTimeout(() => {
+      if (phaseRef.current === 'gameover') return
       if (timeLeftRef.current <= 0) {
         endGame()
       } else {
@@ -266,48 +266,52 @@ export default function RuleSwitch() {
   return (
     <div className="game">
       {phase === 'idle' && (
-        <div className="panel">
-          <h1 className="panel__title">Rule Switch</h1>
-          <p className="panel__text">
-            Train cognitive flexibility. Sort each object by the active rule, and
-            stay ready — the rule will change without warning.
-          </p>
-
-          <div className="rule-switch__difficulty">
-            {Object.values(DIFFICULTY).map((d) => (
-              <button
-                key={d}
-                className={[
-                  'btn',
-                  'rule-switch__difficulty-btn',
-                  difficulty === d && 'rule-switch__difficulty-btn--active',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-                onClick={() => setDifficulty(d)}
-                aria-pressed={difficulty === d}
-              >
-                {d[0].toUpperCase() + d.slice(1)}
-              </button>
-            ))}
-          </div>
-
-          {best !== null && (
-            <p className="panel__text panel__text--muted">
-              Best ({difficulty}): {formatBest('rule-switch', best)}
+        <div className="game__stage">
+          <div className="panel">
+            <h1 className="panel__title">Rule Switch</h1>
+            <p className="panel__text">
+              Train cognitive flexibility. Sort each object by the active rule, and
+              stay ready — the rule will change without warning.
             </p>
-          )}
 
-          <button className="btn btn--primary" onClick={startGame}>
-            Start
-          </button>
+            <div className="rule-switch__difficulty">
+              {Object.values(DIFFICULTY).map((d) => (
+                <button
+                  key={d}
+                  className={[
+                    'btn',
+                    'rule-switch__difficulty-btn',
+                    difficulty === d && 'rule-switch__difficulty-btn--active',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  onClick={() => setDifficulty(d)}
+                  aria-pressed={difficulty === d}
+                >
+                  {d[0].toUpperCase() + d.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            {best !== null && (
+              <p className="panel__text panel__text--muted">
+                Best ({difficulty}): {formatBest('rule-switch', best)}
+              </p>
+            )}
+
+            <button className="btn btn--primary" onClick={startGame}>
+              Start
+            </button>
+          </div>
         </div>
       )}
 
       {phase === 'countdown' && (
-        <div className="panel">
-          <p className="panel__label">Get ready</p>
-          <div className="reverse-countdown">{countdown || 'Go!'}</div>
+        <div className="game__stage">
+          <div className="panel">
+            <p className="panel__label">Get ready</p>
+            <div className="reverse-countdown">{countdown || 'Go!'}</div>
+          </div>
         </div>
       )}
 
@@ -398,38 +402,40 @@ export default function RuleSwitch() {
       )}
 
       {phase === 'gameover' && (
-        <div className="panel">
-          <div className="badge badge--bad">Time's Up</div>
+        <div className="game__stage">
+          <div className="panel">
+            <div className="badge badge--bad">Time's Up</div>
 
-          <div className="rule-switch__summary">
-            <div className="rule-switch__summary-row">
-              <span>Final Score</span>
-              <span>{score}</span>
+            <div className="rule-switch__summary">
+              <div className="rule-switch__summary-row">
+                <span>Final Score</span>
+                <span>{score}</span>
+              </div>
+              <div className="rule-switch__summary-row">
+                <span>Accuracy</span>
+                <span>{accuracy}%</span>
+              </div>
+              <div className="rule-switch__summary-row">
+                <span>Avg Response Time</span>
+                <span>{formatTime(avgResponseTime)}</span>
+              </div>
+              <div className="rule-switch__summary-row">
+                <span>Rule Switches</span>
+                <span>{ruleSwitches}</span>
+              </div>
             </div>
-            <div className="rule-switch__summary-row">
-              <span>Accuracy</span>
-              <span>{accuracy}%</span>
-            </div>
-            <div className="rule-switch__summary-row">
-              <span>Avg Response Time</span>
-              <span>{formatTime(avgResponseTime)}</span>
-            </div>
-            <div className="rule-switch__summary-row">
-              <span>Rule Switches</span>
-              <span>{ruleSwitches}</span>
-            </div>
+
+            {isRecord && <div className="badge badge--record">New Best!</div>}
+            {best !== null && !isRecord && (
+              <p className="panel__text panel__text--muted">
+                Best ({difficulty}): {formatBest('rule-switch', best)}
+              </p>
+            )}
+
+            <button className="btn btn--primary" onClick={() => setPhase('idle')}>
+              Play Again
+            </button>
           </div>
-
-          {isRecord && <div className="badge badge--record">New Best!</div>}
-          {best !== null && !isRecord && (
-            <p className="panel__text panel__text--muted">
-              Best ({difficulty}): {formatBest('rule-switch', best)}
-            </p>
-          )}
-
-          <button className="btn btn--primary" onClick={() => setPhase('idle')}>
-            Play Again
-          </button>
         </div>
       )}
     </div>

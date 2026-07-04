@@ -2,19 +2,20 @@ import { useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
 import {
   START_N,
-  START_LENGTH,
   ROUND_MS,
   COUNTDOWN_SECONDS,
   generateSequence,
   computeStats,
   nextDifficulty,
+  roundsForN,
+  isMatchRound,
 } from './NBack.logic.js'
 import './NBack.css'
 
 export default function NBack() {
   const [phase, setPhase] = useState('idle') // idle | countdown | playing | results
   const [n, setN] = useState(START_N)
-  const [length, setLength] = useState(START_LENGTH)
+  const [length, setLength] = useState(roundsForN(START_N))
   const [highestN, setHighestN] = useState(START_N)
   const [sequence, setSequence] = useState([])
   const [roundIndex, setRoundIndex] = useState(0)
@@ -23,16 +24,19 @@ export default function NBack() {
   const [tappedThisRound, setTappedThisRound] = useState(false)
   const [runStats, setRunStats] = useState(null)
   const [nextN, setNextN] = useState(START_N)
-  const [nextLength, setNextLength] = useState(START_LENGTH)
+  const [nextLength, setNextLength] = useState(roundsForN(START_N))
   const [best, setBest] = useState(() => getBest('n-back'))
   const [isRecord, setIsRecord] = useState(false)
+  const [tapFeedback, setTapFeedback] = useState(null) // null | 'correct' | 'wrong'
 
   const responsesRef = useRef([])
   const reactionTimesRef = useRef([])
   const hasTappedRef = useRef(false)
   const roundStartRef = useRef(0)
+  const startRef = useRef(0)
+  const roundIndexRef = useRef(0)
 
-  const prepareGame = (startN, startLength) => {
+  const prepareGame = (startN, startLength = roundsForN(startN)) => {
     const { sequence: seq } = generateSequence(startLength, startN)
     setN(startN)
     setLength(startLength)
@@ -40,14 +44,17 @@ export default function NBack() {
     setRoundIndex(0)
     setRoundProgress(0)
     setTappedThisRound(false)
+    setTapFeedback(null)
     responsesRef.current = new Array(startLength).fill(false)
     reactionTimesRef.current = new Array(startLength).fill(null)
     hasTappedRef.current = false
     roundStartRef.current = 0
+    startRef.current = 0
+    roundIndexRef.current = 0
   }
 
   const startGame = () => {
-    prepareGame(START_N, START_LENGTH)
+    prepareGame(START_N)
     setHighestN(START_N)
     setCountdownLeft(COUNTDOWN_SECONDS)
     setPhase('countdown')
@@ -83,21 +90,23 @@ export default function NBack() {
   // Playing phase: frame-rate-independent timer and round advancement.
   useEffect(() => {
     if (phase !== 'playing') return
-    const start = Date.now()
-    roundStartRef.current = start
+    startRef.current = Date.now()
+    roundIndexRef.current = 0
+    roundStartRef.current = startRef.current
     hasTappedRef.current = false
     setTappedThisRound(false)
+    setTapFeedback(null)
+    setRoundIndex(0)
 
     const id = setInterval(() => {
-      const now = Date.now()
-      const elapsed = now - start
+      const elapsed = Date.now() - startRef.current
       const idx = Math.floor(elapsed / ROUND_MS)
       const localProgress = (elapsed % ROUND_MS) / ROUND_MS
       setRoundProgress(localProgress)
 
-      if (idx > roundIndex) {
+      if (idx > roundIndexRef.current) {
         const end = Math.min(idx, sequence.length)
-        for (let r = roundIndex; r < end; r++) {
+        for (let r = roundIndexRef.current; r < end; r++) {
           if (!hasTappedRef.current) {
             responsesRef.current[r] = false
           }
@@ -110,22 +119,26 @@ export default function NBack() {
           return
         }
 
+        roundIndexRef.current = idx
         setRoundIndex(idx)
-        roundStartRef.current = start + idx * ROUND_MS
+        roundStartRef.current = startRef.current + idx * ROUND_MS
         setTappedThisRound(false)
+        setTapFeedback(null)
       }
     }, 50)
 
     return () => clearInterval(id)
-  }, [phase, roundIndex, sequence.length])
+  }, [phase, sequence.length])
 
   const handleMatch = () => {
     if (phase !== 'playing' || hasTappedRef.current) return
     const rt = Date.now() - roundStartRef.current
+    const expected = isMatchRound(roundIndexRef.current, sequence, n)
     hasTappedRef.current = true
-    responsesRef.current[roundIndex] = true
-    reactionTimesRef.current[roundIndex] = rt
+    responsesRef.current[roundIndexRef.current] = true
+    reactionTimesRef.current[roundIndexRef.current] = rt
     setTappedThisRound(true)
+    setTapFeedback(expected ? 'correct' : 'wrong')
   }
 
   // Compute results when the run ends.
@@ -186,12 +199,19 @@ export default function NBack() {
           <div className="panel panel--wide">
             <p className="panel__label">N = {n}</p>
             <div className="nback-grid">
-              {Array.from({ length: 9 }, (_, pos) => (
-                <div
-                  key={pos}
-                  className={`nback-cell ${sequence[roundIndex] === pos ? 'nback-cell--active' : ''}`}
-                />
-              ))}
+              {Array.from({ length: 9 }, (_, pos) => {
+                const isActive = sequence[roundIndex] === pos
+                const showFeedback = tapFeedback && isActive
+                let cellClass = 'nback-cell'
+                if (isActive) cellClass += ' nback-cell--active'
+                if (showFeedback) cellClass += ` nback-cell--${tapFeedback}`
+                return (
+                  <div
+                    key={`${roundIndex}-${pos}`}
+                    className={cellClass}
+                  />
+                )
+              })}
             </div>
             <div className="timer">
               <div className="timer__bar" style={{ width: `${roundProgress * 100}%` }} />

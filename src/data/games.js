@@ -13,10 +13,34 @@ import SequenceRecall from '../games/SequenceRecall.jsx'
 import MentalRotation from '../games/MentalRotation.jsx'
 import ReverseRecall from '../games/ReverseRecall.jsx'
 import RuleSwitch from '../games/RuleSwitch.jsx'
+import EstimateIt from '../games/EstimateIt.jsx'
+import OddOneOut from '../games/OddOneOut.jsx'
+import GoNoGo from '../games/GoNoGo.jsx'
+import VisualSearch from '../games/VisualSearch.jsx'
+import TypingAsteroids from '../games/TypingAsteroids.jsx'
 
 // Registry of games grouped by category for the sidebar and home page.
 // Each game: { id, name, description, path, component, group }
 export const GAME_GROUPS = [
+  {
+    label: 'Reasoning',
+    games: [
+      {
+        id: 'estimate-it',
+        name: 'Estimate It',
+        description:
+          'Test your intuition with quick estimation challenges across time, angle, quantity, speed, and more.',
+        path: '/estimate-it',
+      },
+      {
+        id: 'odd-one-out',
+        name: 'Odd One Out',
+        description:
+          'Three objects follow a hidden rule. Spot the single object that breaks it.',
+        path: '/odd-one-out',
+      },
+    ],
+  },
   {
     label: 'Memory',
     games: [
@@ -75,6 +99,18 @@ export const GAME_GROUPS = [
     ],
   },
   {
+    label: 'Speed',
+    games: [
+      {
+        id: 'typing-asteroids',
+        name: 'Typing Asteroids',
+        description:
+          'Type falling words before they crash into your base. Wrong words damage your shields.',
+        path: '/typing-asteroids',
+      },
+    ],
+  },
+  {
     label: 'Perception',
     games: [
       {
@@ -94,6 +130,24 @@ export const GAME_GROUPS = [
         name: 'Grid Rotation',
         description: 'Track how a grid transforms after a hidden rotation.',
         path: '/grid-rotation',
+      },
+      {
+        id: 'visual-search',
+        name: 'Visual Search',
+        description:
+          'Locate the one target symbol hidden among visually similar distractors as fast as you can.',
+        path: '/visual-search',
+      },
+    ],
+  },
+  {
+    label: 'Inhibition',
+    games: [
+      {
+        id: 'go-no-go',
+        name: 'Go / No-Go',
+        description: 'Tap green circles, resist red ones. Train impulse control across 60 fast trials.',
+        path: '/go-no-go',
       },
     ],
   },
@@ -150,6 +204,11 @@ const GAME_COMPONENTS = {
   'mental-rotation': MentalRotation,
   'reverse-recall': ReverseRecall,
   'rule-switch': RuleSwitch,
+  'estimate-it': EstimateIt,
+  'go-no-go': GoNoGo,
+  'visual-search': VisualSearch,
+  'odd-one-out': OddOneOut,
+  'typing-asteroids': TypingAsteroids,
 }
 
 export const DEFAULT_PATH = '/'

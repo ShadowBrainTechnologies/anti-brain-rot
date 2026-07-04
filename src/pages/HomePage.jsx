@@ -10,7 +10,7 @@ export default function HomePage() {
           <span className="home__hero-emoji" aria-hidden="true">
             🧠
           </span>
-          <h1 className="home__hero-title">Brain Rot</h1>
+          <h1 className="home__hero-title">Anti Brain Rot</h1>
           <p className="home__hero-subtitle">
             A collection of fast, focused mini-games to sharpen memory, math,
             perception, and logic. Pick a category and start playing.

@@ -27,9 +27,19 @@
 }
 
 .nback-cell--active {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: #38bdf8;
+  border-color: #0ea5e9;
   animation: nback-pop 0.35s ease-out;
+}
+
+.nback-cell--correct {
+  background: #22c55e;
+  border-color: #16a34a;
+}
+
+.nback-cell--wrong {
+  background: #ef4444;
+  border-color: #dc2626;
 }
 
 @keyframes nback-pop {

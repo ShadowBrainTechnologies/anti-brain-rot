@@ -1,13 +1,8 @@
-import { NavLink, Link, useLocation } from 'react-router-dom'
-import { GAME_GROUPS, ALL_GAMES } from '../data/games.js'
+import { NavLink, Link } from 'react-router-dom'
+import { GAME_GROUPS } from '../data/games.js'
 import './Sidebar.css'
 
 export default function Sidebar({ open, onClose }) {
-  const location = useLocation()
-  const currentGame = ALL_GAMES.find((g) =>
-    location.pathname.startsWith(g.path),
-  )
-
   return (
     <>
       <div
@@ -24,7 +19,7 @@ export default function Sidebar({ open, onClose }) {
           <span className="sidebar__logo" aria-hidden="true">
             🧠
           </span>
-          <span className="sidebar__name">Brain Rot</span>
+          <span className="sidebar__name">Anti Brain Rot</span>
           <button
             className="sidebar__close"
             onClick={(e) => {
@@ -37,18 +32,6 @@ export default function Sidebar({ open, onClose }) {
           </button>
         </Link>
 
-        {currentGame && (
-          <div className="sidebar__current">
-            <p className="sidebar__current-label">Currently Playing</p>
-            <div className="sidebar__current-card">
-              <span className="sidebar__current-name">{currentGame.name}</span>
-              <span className="sidebar__current-group">
-                {currentGame.group}
-              </span>
-            </div>
-          </div>
-        )}
-
         <nav className="sidebar__nav">
           {GAME_GROUPS.map((group) => (
             <div className="sidebar__group" key={group.label}>
@@ -58,7 +41,9 @@ export default function Sidebar({ open, onClose }) {
                   <li key={game.id}>
                     <NavLink
                       to={game.path}
-                      className="sidebar__link"
+                      className={({ isActive }) =>
+                        `sidebar__link${isActive ? ' is-active' : ''}`
+                      }
                       onClick={onClose}
                     >
                       {game.name}

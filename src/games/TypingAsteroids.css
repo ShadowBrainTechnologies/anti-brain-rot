@@ -1,0 +1,291 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px 16px;
+  min-height: 100svh;
+  box-sizing: border-box;
+}
+
+.game__hud {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.game__stat {
+  font-family: var(--mono);
+  font-size: 15px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  color: var(--text-h);
+}
+
+.game__stat--best {
+  background: rgba(22, 163, 74, 0.1);
+  border-color: rgba(22, 163, 74, 0.4);
+  color: #16a34a;
+}
+
+.game__stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.panel {
+  width: 100%;
+  max-width: 460px;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 40px 28px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.panel__title {
+  font-size: 34px;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.panel__text {
+  color: var(--text);
+  line-height: 150%;
+  max-width: 34ch;
+}
+
+.panel__text--muted {
+  opacity: 0.7;
+  font-size: 15px;
+}
+
+.btn {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 28px;
+  transition: transform 0.08s ease, opacity 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn--primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-h);
+  border: 1px solid var(--border);
+}
+
+.btn--ghost:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.badge {
+  font-size: 28px;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 12px;
+}
+
+.badge--bad {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.12);
+}
+
+.badge--record {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 10px;
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.12);
+}
+
+.typing-asteroids__difficulty {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.typing-asteroids__difficulty .btn {
+  text-transform: capitalize;
+  padding: 10px 20px;
+}
+
+.typing-asteroids__field {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  align-self: stretch;
+  margin: 0 auto;
+  min-height: 560px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.typing-asteroids__health {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--app-bg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.typing-asteroids__health-bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.15s ease, background-color 0.15s ease;
+}
+
+.typing-asteroids__health-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.typing-asteroids__asteroid {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  box-shadow: var(--shadow);
+  transform: translateX(-50%);
+  will-change: top;
+}
+
+.typing-asteroids__asteroid--target {
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 4px var(--accent-bg),
+    var(--shadow);
+}
+
+.typing-asteroids__asteroid-word {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-h);
+  white-space: nowrap;
+}
+
+.typing-asteroids__target-indicator {
+  font-size: 12px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.typing-asteroids__input-wrap {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  width: calc(100% - 40px);
+  max-width: 420px;
+  padding: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.typing-asteroids__input-wrap--shake {
+  animation: typing-asteroids-shake 0.22s ease-in-out;
+}
+
+.typing-asteroids__input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text-h);
+  outline: none;
+}
+
+.typing-asteroids__input:focus {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.typing-asteroids__input-wrap .btn {
+  padding: 10px 22px;
+}
+
+@keyframes typing-asteroids-shake {
+  0%,
+  100% {
+    transform: translateX(-50%) translateX(0);
+  }
+  25% {
+    transform: translateX(-50%) translateX(-6px);
+  }
+  75% {
+    transform: translateX(-50%) translateX(6px);
+  }
+}
+
+@media (max-width: 600px) {
+  .typing-asteroids__field {
+    min-height: 420px;
+  }
+
+  .typing-asteroids__asteroid-word {
+    font-size: 14px;
+  }
+
+  .typing-asteroids__input {
+    font-size: 16px;
+  }
+}

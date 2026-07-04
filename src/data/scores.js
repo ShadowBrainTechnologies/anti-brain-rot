@@ -19,6 +19,11 @@ const DIRECTION = {
   'mental-rotation': 'higher', // correct answers in a session
   'reverse-recall': 'higher', // longest digit sequence recalled
   'rule-switch': 'higher', // correct answers in a 90s session
+  'estimate-it': 'higher', // total points across estimation rounds
+  'go-no-go': 'higher', // score across 60 trials
+  'visual-search': 'higher', // score across 20 rounds
+  'odd-one-out': 'higher', // correct answers out of 20
+  'typing-asteroids': 'higher', // score before base is destroyed
 }
 
 function fullKey(gameId, difficulty) {
@@ -83,6 +88,21 @@ export function formatBest(gameId, score) {
     return `${score} digits`
   }
   if (gameId === 'rule-switch') {
+    return `${score} pts`
+  }
+  if (gameId === 'estimate-it') {
+    return `${score} pts`
+  }
+  if (gameId === 'go-no-go') {
+    return `${score} pts`
+  }
+  if (gameId === 'visual-search') {
+    return `${score} pts`
+  }
+  if (gameId === 'odd-one-out') {
+    return `${score}/20`
+  }
+  if (gameId === 'typing-asteroids') {
     return `${score} pts`
   }
   return `Level ${score}`

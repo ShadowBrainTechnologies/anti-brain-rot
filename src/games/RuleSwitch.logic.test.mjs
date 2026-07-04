@@ -6,6 +6,7 @@ import {
   SIZES,
   RULES,
   optionsForRule,
+  generateOptions,
   answerFor,
   rulesForDifficulty,
   pickRule,
@@ -36,13 +37,8 @@ describe('RuleSwitch logic', () => {
     assert.strictEqual(answerFor(object, RULES.SIZE), 'Small')
   })
 
-  it('limits easy difficulty to color and shape rules', () => {
-    const rules = rulesForDifficulty('easy')
-    assert.deepStrictEqual(rules.sort(), [RULES.COLOR, RULES.SHAPE].sort())
-  })
-
-  it('includes all three rules for medium and hard', () => {
-    for (const difficulty of ['medium', 'hard']) {
+  it('includes all three rules for every difficulty', () => {
+    for (const difficulty of ['easy', 'medium', 'hard']) {
       const rules = rulesForDifficulty(difficulty)
       assert.deepStrictEqual(rules.sort(), [RULES.COLOR, RULES.SHAPE, RULES.SIZE].sort())
     }
@@ -54,6 +50,30 @@ describe('RuleSwitch logic', () => {
       const next = pickRule('medium', current)
       assert.notStrictEqual(next, current)
     }
+  })
+
+  it('generates size options that include both Small and Large', () => {
+    const object = { color: 'red', shape: 'circle', size: 'small' }
+    const options = generateOptions(object, RULES.SIZE)
+    assert.strictEqual(options.length, 2)
+    assert.ok(options.includes('Small'))
+    assert.ok(options.includes('Large'))
+  })
+
+  it('generates color options that include the object shape as a distractor', () => {
+    const object = { color: 'green', shape: 'circle', size: 'large' }
+    const options = generateOptions(object, RULES.COLOR)
+    assert.strictEqual(options.length, 4)
+    assert.ok(options.includes('Green'))
+    assert.ok(options.includes('Circle'))
+  })
+
+  it('generates shape options that include the object color as a distractor', () => {
+    const object = { color: 'blue', shape: 'triangle', size: 'small' }
+    const options = generateOptions(object, RULES.SHAPE)
+    assert.strictEqual(options.length, 4)
+    assert.ok(options.includes('Triangle'))
+    assert.ok(options.includes('Blue'))
   })
 
   it('generates objects that avoid three consecutive identical objects', () => {

@@ -9,10 +9,10 @@ export const COLORS = [
 ]
 
 export const SHAPES = [
-  { id: 'circle', label: 'Circle', class: 'shape-circle' },
-  { id: 'square', label: 'Square', class: 'shape-square' },
-  { id: 'triangle', label: 'Triangle', class: 'shape-triangle' },
-  { id: 'star', label: 'Star', class: 'shape-star' },
+  { id: 'circle', label: 'Circle', class: 'shape--circle' },
+  { id: 'square', label: 'Square', class: 'shape--square' },
+  { id: 'triangle', label: 'Triangle', class: 'shape--triangle' },
+  { id: 'star', label: 'Star', class: 'shape--star' },
 ]
 
 export const SIZES = [
@@ -27,9 +27,9 @@ export const RULES = {
 }
 
 export const RULE_LABELS = {
-  color: 'Sort by Color',
-  shape: 'Sort by Shape',
-  size: 'Sort by Size',
+  color: 'Sort by color',
+  shape: 'Sort by shape',
+  size: 'Sort by size',
 }
 
 export const RULE_KEYS = {
@@ -44,12 +44,55 @@ export const DIFFICULTY = {
   HARD: 'hard',
 }
 
-export const SESSION_SECONDS = 90
+export const SESSION_SECONDS = 60
 
 export function optionsForRule(rule) {
   if (rule === RULES.SIZE) return SIZES.map((s) => s.label)
   if (rule === RULES.SHAPE) return SHAPES.map((s) => s.label)
   return COLORS.map((c) => c.label)
+}
+
+export function generateOptions(object, rule) {
+  const correct = answerFor(object, rule)
+
+  // Size rule always shows the two size labels so players can actually sort by size.
+  if (rule === RULES.SIZE) {
+    return shuffle(
+      optionsForRule(RULES.SIZE).filter((label) => label !== correct).concat(correct),
+    )
+  }
+
+  const targetCount = 4
+
+  // Start with tempting distractors taken from the object's irrelevant properties.
+  const distractors = []
+  if (rule !== RULES.COLOR) distractors.push(answerFor(object, RULES.COLOR))
+  if (rule !== RULES.SIZE) distractors.push(answerFor(object, RULES.SIZE))
+  if (rule !== RULES.SHAPE) distractors.push(answerFor(object, RULES.SHAPE))
+
+  // Remove duplicates and the correct answer, then shuffle.
+  let chosen = [...new Set(distractors)].filter((label) => label !== correct)
+  chosen = shuffle(chosen)
+
+  // Fill any remaining slots from the active rule's category.
+  const pool = optionsForRule(rule).filter(
+    (label) => label !== correct && !chosen.includes(label),
+  )
+  while (chosen.length < targetCount - 1 && pool.length > 0) {
+    const index = Math.floor(Math.random() * pool.length)
+    chosen.push(pool.splice(index, 1)[0])
+  }
+
+  return shuffle([correct, ...chosen.slice(0, targetCount - 1)])
+}
+
+function shuffle(items) {
+  const arr = [...items]
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
 }
 
 export function answerFor(object, rule) {
@@ -62,10 +105,8 @@ export function answerFor(object, rule) {
   return COLORS.find((c) => c.id === object.color)?.label
 }
 
-export function rulesForDifficulty(difficulty) {
-  if (difficulty === DIFFICULTY.EASY) {
-    return [RULES.COLOR, RULES.SHAPE]
-  }
+export function rulesForDifficulty(_difficulty) {
+  // All difficulties use the three rules; difficulty changes switching frequency and banner visibility.
   return [RULES.COLOR, RULES.SHAPE, RULES.SIZE]
 }
 
@@ -77,10 +118,10 @@ export function pickRule(difficulty, currentRule) {
 }
 
 export function switchThreshold(difficulty) {
-  if (difficulty === DIFFICULTY.EASY) return 10
-  if (difficulty === DIFFICULTY.MEDIUM) return 6
-  // Hard: random every 3–5 questions.
-  return 3 + Math.floor(Math.random() * 3)
+  if (difficulty === DIFFICULTY.EASY) return 3
+  if (difficulty === DIFFICULTY.MEDIUM) return 2
+  // Hard: random every 1–2 questions for continuous switching.
+  return 1 + Math.floor(Math.random() * 2)
 }
 
 function randomItem(items) {

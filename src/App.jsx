@@ -17,6 +17,11 @@ import SequenceRecall from './games/SequenceRecall.jsx'
 import MentalRotation from './games/MentalRotation.jsx'
 import ReverseRecall from './games/ReverseRecall.jsx'
 import RuleSwitch from './games/RuleSwitch.jsx'
+import EstimateIt from './games/EstimateIt.jsx'
+import GoNoGo from './games/GoNoGo.jsx'
+import VisualSearch from './games/VisualSearch.jsx'
+import OddOneOut from './games/OddOneOut.jsx'
+import TypingAsteroids from './games/TypingAsteroids.jsx'
 import { DEFAULT_PATH } from './data/games.js'
 import './App.css'
 
@@ -58,6 +63,11 @@ export default function App() {
             <Route path="/mental-rotation" element={<MentalRotation />} />
             <Route path="/reverse-recall" element={<ReverseRecall />} />
             <Route path="/rule-switch" element={<RuleSwitch />} />
+            <Route path="/estimate-it" element={<EstimateIt />} />
+            <Route path="/go-no-go" element={<GoNoGo />} />
+            <Route path="/visual-search" element={<VisualSearch />} />
+            <Route path="/odd-one-out" element={<OddOneOut />} />
+            <Route path="/typing-asteroids" element={<TypingAsteroids />} />
             <Route path="*" element={<Navigate to={DEFAULT_PATH} replace />} />
           </Routes>
         </main>
@@ -83,5 +93,10 @@ function titleFor(pathname) {
   if (pathname.startsWith('/mental-rotation')) return 'Mental Rotation'
   if (pathname.startsWith('/reverse-recall')) return 'Reverse Recall'
   if (pathname.startsWith('/rule-switch')) return 'Rule Switch'
-  return 'Brain Rot'
+  if (pathname.startsWith('/estimate-it')) return 'Estimate It'
+  if (pathname.startsWith('/go-no-go')) return 'Go / No-Go'
+  if (pathname.startsWith('/visual-search')) return 'Visual Search'
+  if (pathname.startsWith('/odd-one-out')) return 'Odd One Out'
+  if (pathname.startsWith('/typing-asteroids')) return 'Typing Asteroids'
+  return 'Anti Brain Rot'
 }

@@ -1,12 +1,15 @@
 export const START_N = 1
-export const START_LENGTH = 20
+export const START_LENGTH = 5
 export const MATCH_RATIO = 0.3
 export const ROUND_MS = 2000
 export const COUNTDOWN_SECONDS = 3
 export const MAX_N = 6
 export const MAX_LENGTH = 30
-export const LENGTH_STEP = 2
 export const ADVANCE_ACCURACY = 80
+
+export function roundsForN(n) {
+  return Math.min(MAX_LENGTH, 5 * n)
+}
 
 export function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5)
@@ -79,11 +82,12 @@ export function nextDifficulty(accuracy, n, length) {
   if (accuracy < ADVANCE_ACCURACY) {
     return { n, length }
   }
-  if (length + LENGTH_STEP <= MAX_LENGTH) {
-    return { n, length: length + LENGTH_STEP }
-  }
   if (n < MAX_N) {
-    return { n: n + 1, length: START_LENGTH }
+    const nextN = n + 1
+    return { n: nextN, length: roundsForN(nextN) }
+  }
+  if (length + 2 <= MAX_LENGTH) {
+    return { n, length: length + 2 }
   }
   return { n, length }
 }

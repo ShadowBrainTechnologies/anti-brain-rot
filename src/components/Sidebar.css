@@ -70,45 +70,6 @@
   border-radius: 6px;
 }
 
-.sidebar__current {
-  padding: 16px 16px 0;
-}
-
-.sidebar__current-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  color: var(--text);
-  opacity: 0.7;
-  margin: 0 0 8px;
-  padding: 0 4px;
-}
-
-.sidebar__current-card {
-  padding: 12px;
-  border-radius: 10px;
-  background: var(--accent-bg);
-  border: 1px solid var(--accent-border);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.sidebar__current-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-h);
-}
-
-.sidebar__current-group {
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--accent);
-}
-
 .sidebar__nav {
   flex: 1;
   overflow-y: auto;
