@@ -1,58 +1,22 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import {
+  ROUND_COUNT,
+  MEMORIZE_TIME,
+  RECALL_TIME,
+  ROTATE_DURATION,
+  DIRECTIONS,
+  shuffle,
+  pick,
+  sizeForWins,
+  blueCountForSize,
+  rotateIndex,
+  buildRotatedOrder,
+  rotationLabel,
+  rotationDeg,
+  setsEqual,
+} from './GridRotation.logic.js'
 import './GridRotation.css'
-
-const ROUND_COUNT = 10
-const MEMORIZE_TIME = 5
-const RECALL_TIME = 15
-const ROTATE_DURATION = 3000
-
-const DIRECTIONS = ['cw', 'ccw']
-
-function shuffle(arr) {
-  return [...arr].sort(() => Math.random() - 0.5)
-}
-
-function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)]
-}
-
-function sizeForWins(wins) {
-  return Math.min(5, 3 + Math.floor(wins / 3))
-}
-
-function blueCountForSize(size) {
-  if (size === 3) return 3
-  if (size === 4) return 5
-  return 7
-}
-
-function rotateIndex(index, size, degrees) {
-  const r = Math.floor(index / size)
-  const c = index % size
-  switch (degrees) {
-    case 90:
-      return c * size + (size - 1 - r)
-    case 270:
-      return (size - 1 - c) * size + r
-    default:
-      return index
-  }
-}
-
-function rotationLabel(direction) {
-  return direction === 'cw' ? '90° right' : '90° left'
-}
-
-function rotationDeg(direction) {
-  return direction === 'cw' ? 90 : -90
-}
-
-function setsEqual(a, b) {
-  if (a.size !== b.size) return false
-  for (const x of a) if (!b.has(x)) return false
-  return true
-}
 
 export default function GridRotation() {
   const [phase, setPhase] = useState('idle') // idle | memorize | rotate | recall | feedback | finished
@@ -62,6 +26,7 @@ export default function GridRotation() {
   const [direction, setDirection] = useState('cw')
   const [original, setOriginal] = useState(new Set())
   const [expected, setExpected] = useState(new Set())
+  const [rotatedOrder, setRotatedOrder] = useState([])
   const [selected, setSelected] = useState(new Set())
   const [timeLeft, setTimeLeft] = useState(0)
   const [isCorrect, setIsCorrect] = useState(null)
@@ -72,14 +37,15 @@ export default function GridRotation() {
     const nextSize = sizeForWins(currentScore)
     const nextBlue = blueCountForSize(nextSize)
     const nextDirection = pick(DIRECTIONS)
+    const degrees = nextDirection === 'cw' ? 90 : 270
     const all = Array.from({ length: nextSize * nextSize }, (_, i) => i)
     const blues = new Set(shuffle(all).slice(0, nextBlue))
-    const degrees = nextDirection === 'cw' ? 90 : 270
     const exp = new Set([...blues].map((i) => rotateIndex(i, nextSize, degrees)))
     setSize(nextSize)
     setDirection(nextDirection)
     setOriginal(blues)
     setExpected(exp)
+    setRotatedOrder(buildRotatedOrder(nextSize, degrees))
     setSelected(new Set())
     setIsCorrect(null)
     setRound(roundIndex)
@@ -184,11 +150,13 @@ export default function GridRotation() {
   const memorizeProgress = phase === 'memorize' ? Math.max(0, timeLeft / MEMORIZE_TIME) : 0
   const recallProgress = phase === 'recall' ? Math.max(0, timeLeft / RECALL_TIME) : 0
 
-  const cells = Array.from({ length: size * size }, (_, i) => i)
-  const isRotated = phase === 'rotate' || phase === 'recall' || phase === 'feedback'
+  const isOriginalLayout = phase === 'memorize' || phase === 'rotate'
+  const layout = isOriginalLayout
+    ? Array.from({ length: size * size }, (_, i) => i)
+    : rotatedOrder
   const gridStyle = {
     gridTemplateColumns: `repeat(${size}, 1fr)`,
-    transform: isRotated ? `rotate(${rotationDeg(direction)}deg)` : 'rotate(0deg)',
+    transform: phase === 'rotate' ? `rotate(${rotationDeg(direction)}deg)` : 'rotate(0deg)',
   }
 
   return (
@@ -211,10 +179,9 @@ export default function GridRotation() {
           <div className="panel">
             <h1 className="panel__title">Grid Rotation</h1>
             <p className="panel__text">
-              Memorize the blue squares. The whole grid will then rotate slowly 90° left or right
-              while the colors stay visible. After it stops, the colors hide and you must select
-              every square that is blue in the rotated position. The grid grows after every 3
-              correct rounds: 3×3 → 4×4 → 5×5.
+              Memorize the blue squares. The grid will then rotate slowly 90° left or right while
+              the colors are hidden. After it stops, select every square that is blue in the
+              rotated position. The grid grows after every 3 correct rounds: 3×3 → 4×4 → 5×5.
             </p>
             <button className="btn btn--primary" onClick={startGame}>
               Start
@@ -235,12 +202,12 @@ export default function GridRotation() {
               className={`matrix-grid ${phase === 'rotate' ? 'matrix-grid--animate' : ''}`}
               style={gridStyle}
             >
-              {cells.map((i) => {
-                const isExpected = expected.has(i)
-                const isSelected = selected.has(i)
+              {layout.map((originalIndex, pos) => {
+                const isExpected = expected.has(pos)
+                const isSelected = selected.has(pos)
                 let cellClass = 'matrix-cell'
 
-                if ((phase === 'memorize' || phase === 'rotate') && original.has(i)) {
+                if (phase === 'memorize' && original.has(originalIndex)) {
                   cellClass += ' matrix-cell--blue'
                 } else if (phase === 'recall' && isSelected) {
                   cellClass += ' matrix-cell--selected'
@@ -256,11 +223,11 @@ export default function GridRotation() {
 
                 return (
                   <button
-                    key={i}
+                    key={`${round}-${pos}-${originalIndex}`}
                     className={cellClass}
-                    onClick={() => toggleSelected(i)}
+                    onClick={() => toggleSelected(pos)}
                     disabled={phase !== 'recall'}
-                    aria-label={`Cell ${i + 1}`}
+                    aria-label={`Cell ${pos + 1}`}
                   />
                 )
               })}
@@ -282,7 +249,7 @@ export default function GridRotation() {
             )}
 
             {phase === 'rotate' && (
-              <p className="panel__text panel__text--muted">Rotating…</p>
+              <p className="panel__text panel__text--muted">Rotating… colors hidden</p>
             )}
 
             {phase === 'recall' && (

@@ -1,8 +1,13 @@
-import { NavLink } from 'react-router-dom'
-import { GAME_GROUPS } from '../data/games.js'
+import { NavLink, Link, useLocation } from 'react-router-dom'
+import { GAME_GROUPS, ALL_GAMES } from '../data/games.js'
 import './Sidebar.css'
 
 export default function Sidebar({ open, onClose }) {
+  const location = useLocation()
+  const currentGame = ALL_GAMES.find((g) =>
+    location.pathname.startsWith(g.path),
+  )
+
   return (
     <>
       <div
@@ -11,17 +16,38 @@ export default function Sidebar({ open, onClose }) {
         aria-hidden="true"
       />
       <aside className={`sidebar ${open ? 'is-open' : ''}`}>
-        <div className="sidebar__brand">
-          <span className="sidebar__logo">🧠</span>
+        <Link
+          to="/"
+          className="sidebar__brand"
+          onClick={onClose}
+        >
+          <span className="sidebar__logo" aria-hidden="true">
+            🧠
+          </span>
           <span className="sidebar__name">Brain Rot</span>
           <button
             className="sidebar__close"
-            onClick={onClose}
+            onClick={(e) => {
+              e.preventDefault()
+              onClose()
+            }}
             aria-label="Close menu"
           >
             ✕
           </button>
-        </div>
+        </Link>
+
+        {currentGame && (
+          <div className="sidebar__current">
+            <p className="sidebar__current-label">Currently Playing</p>
+            <div className="sidebar__current-card">
+              <span className="sidebar__current-name">{currentGame.name}</span>
+              <span className="sidebar__current-group">
+                {currentGame.group}
+              </span>
+            </div>
+          </div>
+        )}
 
         <nav className="sidebar__nav">
           {GAME_GROUPS.map((group) => (

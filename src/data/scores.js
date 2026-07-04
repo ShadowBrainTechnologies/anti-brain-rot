@@ -14,6 +14,11 @@ const DIRECTION = {
   'attention-is-all-you-need': 'higher', // correct answers out of 3
   'grid-rotation': 'higher', // correct answers out of 10
   'first-failure': 'higher', // level reached
+  'n-back': 'higher', // highest N reached
+  'sequence-recall': 'higher', // longest sequence reached (tiles)
+  'mental-rotation': 'higher', // correct answers in a session
+  'reverse-recall': 'higher', // longest digit sequence recalled
+  'rule-switch': 'higher', // correct answers in a 90s session
 }
 
 function fullKey(gameId, difficulty) {
@@ -64,6 +69,21 @@ export function formatBest(gameId, score) {
   }
   if (gameId === 'first-failure') {
     return `Level ${score}`
+  }
+  if (gameId === 'mental-rotation') {
+    return `${score} pts`
+  }
+  if (gameId === 'n-back') {
+    return `N = ${score}`
+  }
+  if (gameId === 'sequence-recall') {
+    return `${score} tiles`
+  }
+  if (gameId === 'reverse-recall') {
+    return `${score} digits`
+  }
+  if (gameId === 'rule-switch') {
+    return `${score} pts`
   }
   return `Level ${score}`
 }

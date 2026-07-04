@@ -11,7 +11,7 @@
 }
 
 .matrix-grid--animate {
-  transition: transform 3s ease-in-out;
+  transition: transform 1.8s ease-in-out;
 }
 
 .matrix-cell {
