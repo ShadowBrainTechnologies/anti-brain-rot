@@ -23,6 +23,8 @@ import VisualSearch from './games/VisualSearch.jsx'
 import OddOneOut from './games/OddOneOut.jsx'
 import TypingAsteroids from './games/TypingAsteroids.jsx'
 import FaceIdentify from './games/FaceIdentify.jsx'
+import UnfollowTheLeader from './games/UnfollowTheLeader.jsx'
+import ColorSwitch from './games/ColorSwitch.jsx'
 import { DEFAULT_PATH } from './data/games.js'
 import './App.css'
 
@@ -70,6 +72,8 @@ export default function App() {
             <Route path="/odd-one-out" element={<OddOneOut />} />
             <Route path="/typing-asteroids" element={<TypingAsteroids />} />
             <Route path="/face-identify" element={<FaceIdentify />} />
+            <Route path="/unfollow-the-leader" element={<UnfollowTheLeader />} />
+            <Route path="/color-switch" element={<ColorSwitch />} />
             <Route path="*" element={<Navigate to={DEFAULT_PATH} replace />} />
           </Routes>
         </main>
@@ -101,5 +105,7 @@ function titleFor(pathname) {
   if (pathname.startsWith('/odd-one-out')) return 'Odd One Out'
   if (pathname.startsWith('/typing-asteroids')) return 'Typing Asteroids'
   if (pathname.startsWith('/face-identify')) return 'Face Identify'
+  if (pathname.startsWith('/unfollow-the-leader')) return 'Unfollow the Leader'
+  if (pathname.startsWith('/color-switch')) return 'Color Switch'
   return 'Anti Brain Rot'
 }

@@ -19,6 +19,8 @@ import GoNoGo from '../games/GoNoGo.jsx'
 import VisualSearch from '../games/VisualSearch.jsx'
 import TypingAsteroids from '../games/TypingAsteroids.jsx'
 import FaceIdentify from '../games/FaceIdentify.jsx'
+import UnfollowTheLeader from '../games/UnfollowTheLeader.jsx'
+import ColorSwitch from '../games/ColorSwitch.jsx'
 
 // Registry of games grouped by category for the sidebar and home page.
 // Each game: { id, name, description, path, component, group }
@@ -81,6 +83,12 @@ export const GAME_GROUPS = [
         description: 'Study faces and their names for 15 seconds, then match each face to the right name.',
         path: '/face-identify',
       },
+      {
+        id: 'unfollow-the-leader',
+        name: 'Unfollow the Leader',
+        description: 'Watch tiles light up in order, then tap them back in reverse.',
+        path: '/unfollow-the-leader',
+      },
     ],
   },
   {
@@ -114,6 +122,12 @@ export const GAME_GROUPS = [
         description:
           'Type falling words before they crash into your base. Wrong words damage your shields.',
         path: '/typing-asteroids',
+      },
+      {
+        id: 'color-switch',
+        name: 'Color Switch',
+        description: 'Toggle lane colors to match falling circles in a 45-second rush.',
+        path: '/color-switch',
       },
     ],
   },
@@ -217,6 +231,8 @@ const GAME_COMPONENTS = {
   'odd-one-out': OddOneOut,
   'typing-asteroids': TypingAsteroids,
   'face-identify': FaceIdentify,
+  'unfollow-the-leader': UnfollowTheLeader,
+  'color-switch': ColorSwitch,
 }
 
 export const DEFAULT_PATH = '/'

@@ -1,0 +1,139 @@
+.cs-arena {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  width: min(400px, 90vw);
+  margin: 0 auto;
+  height: 400px;
+}
+
+.cs-lane {
+  flex: 1;
+  position: relative;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cs-ball {
+  position: absolute;
+  left: 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.cs-ball--red {
+  background: #ef4444;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+}
+
+.cs-ball--blue {
+  background: #3b82f6;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.4);
+}
+
+.cs-catcher {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  border: 3px solid var(--text-h);
+  transition: background 0.15s ease;
+  pointer-events: none;
+}
+
+.cs-catcher--red {
+  background: #ef4444;
+  border-color: #ef4444;
+}
+
+.cs-catcher--blue {
+  background: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.cs-flash {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 24px;
+  font-weight: 700;
+  pointer-events: none;
+  animation: cs-flash-fade 0.4s ease-out forwards;
+}
+
+.cs-flash--ok {
+  color: #22c55e;
+}
+
+.cs-flash--bad {
+  color: #ef4444;
+}
+
+@keyframes cs-flash-fade {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+}
+
+.cs-timer {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-h);
+  text-align: center;
+  margin-top: 12px;
+}
+
+.cs-countdown {
+  font-size: min(120px, 25vw);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cs-summary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cs-summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 15px;
+}
+
+.cs-summary__row span:last-child {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--text-h);
+}
