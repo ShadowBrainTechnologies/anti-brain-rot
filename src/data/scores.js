@@ -25,6 +25,8 @@ const DIRECTION = {
   'odd-one-out': 'higher', // correct answers out of 20
   'typing-asteroids': 'higher', // score before base is destroyed
   'face-identify': 'higher', // total faces correctly identified
+  'unfollow-the-leader': 'higher', // longest sequence reversed
+  'color-switch': 'higher', // score in 45-second session
 }
 
 function fullKey(gameId, difficulty) {
@@ -108,6 +110,12 @@ export function formatBest(gameId, score) {
   }
   if (gameId === 'face-identify') {
     return `${score} faces`
+  }
+  if (gameId === 'unfollow-the-leader') {
+    return `${score} tiles`
+  }
+  if (gameId === 'color-switch') {
+    return `${score} pts`
   }
   return `Level ${score}`
 }
