@@ -22,6 +22,7 @@ import GoNoGo from './games/GoNoGo.jsx'
 import VisualSearch from './games/VisualSearch.jsx'
 import OddOneOut from './games/OddOneOut.jsx'
 import TypingAsteroids from './games/TypingAsteroids.jsx'
+import FaceIdentify from './games/FaceIdentify.jsx'
 import { DEFAULT_PATH } from './data/games.js'
 import './App.css'
 
@@ -68,6 +69,7 @@ export default function App() {
             <Route path="/visual-search" element={<VisualSearch />} />
             <Route path="/odd-one-out" element={<OddOneOut />} />
             <Route path="/typing-asteroids" element={<TypingAsteroids />} />
+            <Route path="/face-identify" element={<FaceIdentify />} />
             <Route path="*" element={<Navigate to={DEFAULT_PATH} replace />} />
           </Routes>
         </main>
@@ -98,5 +100,6 @@ function titleFor(pathname) {
   if (pathname.startsWith('/visual-search')) return 'Visual Search'
   if (pathname.startsWith('/odd-one-out')) return 'Odd One Out'
   if (pathname.startsWith('/typing-asteroids')) return 'Typing Asteroids'
+  if (pathname.startsWith('/face-identify')) return 'Face Identify'
   return 'Anti Brain Rot'
 }

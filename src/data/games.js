@@ -18,6 +18,7 @@ import OddOneOut from '../games/OddOneOut.jsx'
 import GoNoGo from '../games/GoNoGo.jsx'
 import VisualSearch from '../games/VisualSearch.jsx'
 import TypingAsteroids from '../games/TypingAsteroids.jsx'
+import FaceIdentify from '../games/FaceIdentify.jsx'
 
 // Registry of games grouped by category for the sidebar and home page.
 // Each game: { id, name, description, path, component, group }
@@ -73,6 +74,12 @@ export const GAME_GROUPS = [
         name: 'Reverse Recall',
         description: 'Memorize digits, then enter them in reverse order as the sequence grows.',
         path: '/reverse-recall',
+      },
+      {
+        id: 'face-identify',
+        name: 'Face Identify',
+        description: 'Study faces and their names for 15 seconds, then match each face to the right name.',
+        path: '/face-identify',
       },
     ],
   },
@@ -209,6 +216,7 @@ const GAME_COMPONENTS = {
   'visual-search': VisualSearch,
   'odd-one-out': OddOneOut,
   'typing-asteroids': TypingAsteroids,
+  'face-identify': FaceIdentify,
 }
 
 export const DEFAULT_PATH = '/'

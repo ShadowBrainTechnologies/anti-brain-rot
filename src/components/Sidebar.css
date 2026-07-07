@@ -130,7 +130,9 @@
 @media (min-width: 900px) {
   .sidebar {
     transform: translateX(0);
-    position: sticky;
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
   }
 
   .sidebar__backdrop {

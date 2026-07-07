@@ -49,6 +49,16 @@
 }
 
 @media (min-width: 900px) {
+  .shell {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .shell__main {
+    height: 100%;
+    overflow-y: auto;
+  }
+
   .topbar__menu {
     display: none;
   }

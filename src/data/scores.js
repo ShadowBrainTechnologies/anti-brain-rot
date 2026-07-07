@@ -24,6 +24,7 @@ const DIRECTION = {
   'visual-search': 'higher', // score across 20 rounds
   'odd-one-out': 'higher', // correct answers out of 20
   'typing-asteroids': 'higher', // score before base is destroyed
+  'face-identify': 'higher', // total faces correctly identified
 }
 
 function fullKey(gameId, difficulty) {
@@ -104,6 +105,9 @@ export function formatBest(gameId, score) {
   }
   if (gameId === 'typing-asteroids') {
     return `${score} pts`
+  }
+  if (gameId === 'face-identify') {
+    return `${score} faces`
   }
   return `Level ${score}`
 }
