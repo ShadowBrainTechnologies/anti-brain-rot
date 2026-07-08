@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import {
   ROUND_COUNT,
   MEMORIZE_TIME,
@@ -56,6 +58,7 @@ export default function GridRotation() {
   const startGame = useCallback(() => {
     setScore(0)
     setIsRecord(false)
+    feedback('start')
     generateRound(0, 0)
   }, [generateRound])
 
@@ -70,6 +73,8 @@ export default function GridRotation() {
 
   const finishGame = useCallback((finalScore) => {
     const record = saveBest('grid-rotation', null, finalScore)
+    recordResult('grid-rotation', finalScore)
+    feedback('win')
     setIsRecord(record)
     setBest(getBest('grid-rotation'))
     setPhase('finished')
@@ -100,7 +105,12 @@ export default function GridRotation() {
     if (phase !== 'recall') return
     const correct = setsEqual(selected, expected)
     setIsCorrect(correct)
-    if (correct) setScore((s) => s + 1)
+    if (correct) {
+      setScore((s) => s + 1)
+      feedback('correct')
+    } else {
+      feedback('wrong')
+    }
     setPhase('feedback')
   }, [phase, selected, expected])
 
@@ -135,6 +145,7 @@ export default function GridRotation() {
       if (remaining <= 0) {
         clearInterval(id)
         setIsCorrect(false)
+        feedback('wrong')
         setPhase('feedback')
       }
     }, 100)
