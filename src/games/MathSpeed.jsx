@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import './MathSpeed.css'
 
 const QUESTION_COUNT = 10
@@ -188,13 +190,16 @@ export default function MathSpeed() {
     setIsRecord(false)
     setTimeLeft(TIME_PER_QUESTION)
     setPhase('playing')
+    feedback('start')
   }
 
   const finishGame = useCallback((finalScore) => {
     const record = saveBest('math-speed', null, finalScore)
+    recordResult('math-speed', finalScore)
     setIsRecord(record)
     setBest(getBest('math-speed'))
     setPhase('finished')
+    feedback('win')
   }, [])
 
   const advance = useCallback(() => {
@@ -215,7 +220,12 @@ export default function MathSpeed() {
       const correct = option === questions[index].answer
       setSelected(option)
       setWasCorrect(correct)
-      if (correct) setScore((s) => s + 1)
+      if (correct) {
+        setScore((s) => s + 1)
+        feedback('correct')
+      } else {
+        feedback('wrong')
+      }
       setPhase('feedback')
       setTimeout(advance, 900)
     },
@@ -226,6 +236,7 @@ export default function MathSpeed() {
     if (phase !== 'playing') return
     setSelected(null)
     setWasCorrect(false)
+    feedback('wrong')
     setPhase('feedback')
     setTimeout(advance, 900)
   }, [phase, advance])
