@@ -1,0 +1,56 @@
+@import './game-base.css';
+
+.mt-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.mt-card {
+  font: inherit;
+  aspect-ratio: 1 / 1;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font-size: clamp(24px, 8vw, 40px);
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+
+.mt-card:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.mt-card:disabled {
+  cursor: default;
+}
+
+.mt-card--flipped {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+}
+
+.mt-card--matched {
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+  border: 1px solid rgba(22, 163, 74, 0.4);
+}
+
+.mt-summary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mt-summary__row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--accent-bg);
+  border-radius: 8px;
+}
