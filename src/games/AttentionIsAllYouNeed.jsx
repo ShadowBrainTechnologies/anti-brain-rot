@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import './AttentionIsAllYouNeed.css'
 
 const READING_TIME_MS = 25000
@@ -1401,6 +1403,7 @@ export default function AttentionIsAllYouNeed() {
     setWasCorrect(null)
     setIsRecord(false)
     setTimeLeft(READING_TIME_MS)
+    feedback('start')
     setPhase('reading')
   }, [])
 
@@ -1410,9 +1413,11 @@ export default function AttentionIsAllYouNeed() {
     if (index + 1 >= questions.length) {
       const finalScore = score + (wasCorrect ? 1 : 0)
       const record = saveBest('attention-is-all-you-need', null, finalScore)
+      recordResult('attention-is-all-you-need', finalScore)
       setIsRecord(record)
       setBest(getBest('attention-is-all-you-need'))
       setScore(finalScore)
+      feedback('win')
       setPhase('finished')
     } else {
       if (wasCorrect) setScore((s) => s + 1)
@@ -1447,6 +1452,7 @@ export default function AttentionIsAllYouNeed() {
     (optionIndex) => {
       if (phase !== 'question') return
       const correct = optionIndex === questions[index].answer
+      feedback(correct ? 'correct' : 'wrong')
       setSelected(optionIndex)
       setWasCorrect(correct)
       setPhase('feedback')
