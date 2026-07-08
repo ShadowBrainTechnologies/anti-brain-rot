@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import {
   MEMORIZE_MS_PER_FACE,
   NEXT_ROUND_DELAY_MS,
@@ -38,6 +40,7 @@ export default function FaceIdentify() {
     setScore(0)
     setIsRecord(false)
     setLastResult(null)
+    feedback('start')
     beginRound(1)
   }, [beginRound])
 
@@ -86,10 +89,14 @@ export default function FaceIdentify() {
       setScore(newScore)
       if (result.perfect) {
         setPhase('roundover')
+        feedback('correct')
       } else {
+        feedback('wrong')
         const record = saveBest('face-identify', null, newScore)
+        recordResult('face-identify', newScore)
         setIsRecord(record)
         setBest(getBest('face-identify'))
+        feedback('lose')
         setPhase('gameover')
       }
     } else {
