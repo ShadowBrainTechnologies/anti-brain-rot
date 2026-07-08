@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local-only Claude Code config (keep out of the open-source repo)
+CLAUDE.md
+.claude/commands/shadowarmy.md
