@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { getPuzzle, primeAllPools } from './puzzlePool.js'
 import { parseBoard, parseGivenMask, findConflicts, isSolved } from './board.js'
 import { getBest, saveBest, formatBest } from '../../data/scores.js'
+import { feedback } from '../../lib/feedback.js'
+import { recordResult } from '../../data/calibration.js'
 import './Sudoku.css'
 
 const DIFFICULTIES = [
@@ -40,6 +42,7 @@ export default function Sudoku() {
     setShowErrors(false)
     setIsRecord(false)
     setBest(getBest('sudoku', diff))
+    feedback('start')
   }
 
   const startGame = () => newGame(difficulty)
@@ -69,7 +72,9 @@ export default function Sudoku() {
   useEffect(() => {
     if (status !== 'playing' || !values.length || !isSolved(values)) return
     setStatus('won')
+    feedback('win')
     const record = saveBest('sudoku', difficulty, seconds)
+    recordResult('sudoku', seconds)
     setIsRecord(record)
     setBest(getBest('sudoku', difficulty))
   }, [values, status, difficulty, seconds])
@@ -79,6 +84,10 @@ export default function Sudoku() {
     const next = values.slice()
     next[i] = val
     setValues(next)
+    if (val !== 0) {
+      if (solution[i] === val) feedback('correct')
+      else feedback('wrong')
+    }
   }
 
   const onCellChange = (i, e) => {
