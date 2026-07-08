@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import './RPSReversal.css'
 
 const HANDS = ['rock', 'paper', 'scissors']
@@ -48,6 +50,7 @@ export default function RPSReversal() {
   const [isRecord, setIsRecord] = useState(false)
 
   const startGame = () => {
+    feedback('start')
     const rs = Array.from({ length: ROUND_COUNT }, generateRound)
     setRounds(rs)
     setIndex(0)
@@ -61,6 +64,8 @@ export default function RPSReversal() {
 
   const finishGame = useCallback((finalScore) => {
     const record = saveBest('rps-reversal', null, finalScore)
+    recordResult('rps-reversal', finalScore)
+    feedback('win')
     setIsRecord(record)
     setBest(getBest('rps-reversal'))
     setPhase('finished')
@@ -86,7 +91,12 @@ export default function RPSReversal() {
       const correct = hand === target
       setSelected(hand)
       setWasCorrect(correct)
-      if (correct) setScore((s) => s + 1)
+      if (correct) {
+        feedback('correct')
+        setScore((s) => s + 1)
+      } else {
+        feedback('wrong')
+      }
       setPhase('feedback')
       setTimeout(advance, 700)
     },
