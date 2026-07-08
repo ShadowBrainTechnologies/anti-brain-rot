@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import './FirstFailure.css'
 
 const LEVELS = [8, 12, 16, 20, 24, 30, 36, 44, 52, 64, 80, 100]
@@ -47,6 +49,7 @@ export default function FirstFailure() {
     setIsRecord(false)
     setMessage('')
     setPhase('playing')
+    feedback('start')
   }, [])
 
   const startGame = useCallback(() => {
@@ -73,8 +76,10 @@ export default function FirstFailure() {
 
       if (isPass) {
         setLow(i + 1)
+        feedback('correct')
       } else {
         setHigh(i)
+        feedback('wrong')
       }
     },
     [phase, low, high, queries, firstFailure],
@@ -86,6 +91,7 @@ export default function FirstFailure() {
 
       if (answer !== firstFailure) {
         const record = saveBest('first-failure', null, levelIndex + 1)
+        recordResult('first-failure', levelIndex + 1)
         setIsRecord(record)
         setBest(getBest('first-failure'))
         setMessage(
@@ -94,25 +100,30 @@ export default function FirstFailure() {
             : `The first failure was box ${firstFailure + 1}.`,
         )
         setPhase('wrong')
+        feedback('lose')
         return
       }
 
       const optimal = optimalSteps(n)
       if (steps > optimal) {
         const record = saveBest('first-failure', null, levelIndex + 1)
+        recordResult('first-failure', levelIndex + 1)
         setIsRecord(record)
         setBest(getBest('first-failure'))
         setMessage(
           `Correct, but you used ${steps} steps. The optimal binary-search count for ${n} boxes is ${optimal}.`,
         )
         setPhase('too-many')
+        feedback('lose')
         return
       }
 
       const record = saveBest('first-failure', null, levelIndex + 2)
+      recordResult('first-failure', levelIndex + 2)
       setIsRecord(record)
       setBest(getBest('first-failure'))
       setPhase('solved')
+      feedback('win')
     },
     [phase, firstFailure, n, steps, levelIndex],
   )
