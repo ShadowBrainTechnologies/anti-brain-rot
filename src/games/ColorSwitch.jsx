@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import {
   COLORS,
   SESSION_SECONDS,
@@ -20,6 +22,7 @@ export default function ColorSwitch() {
   const [balls, setBalls] = useState([])
   const [score, setScore] = useState(0)
   const [timeLeft, setTimeLeft] = useState(SESSION_SECONDS)
+  const [countdown, setCountdown] = useState(3)
   const [best, setBest] = useState(() => getBest('color-switch'))
   const [isRecord, setIsRecord] = useState(false)
   const [flashes, setFlashes] = useState([])
@@ -40,9 +43,11 @@ export default function ColorSwitch() {
   }, [catcherColors])
 
   const startGame = useCallback(() => {
+    feedback('start')
     setScore(0)
     scoreRef.current = 0
     setTimeLeft(SESSION_SECONDS)
+    setCountdown(3)
     setCatcherColors([COLORS[0], COLORS[0]])
     catcherRef.current = [COLORS[0], COLORS[0]]
     setBalls([])
@@ -63,7 +68,7 @@ export default function ColorSwitch() {
         clearInterval(id)
         setPhase('playing')
       } else {
-        setTimeLeft(count)
+        setCountdown(count)
       }
     }, 800)
     return () => clearInterval(id)
@@ -80,9 +85,11 @@ export default function ColorSwitch() {
         clearInterval(timerId)
         const finalScore = scoreRef.current
         const record = saveBest('color-switch', null, finalScore)
+        recordResult('color-switch', finalScore)
         setIsRecord(record)
         setBest(getBest('color-switch'))
         setPhase('gameover')
+        feedback('win')
       }
     }, 1000)
 
@@ -112,6 +119,11 @@ export default function ColorSwitch() {
         if (newY >= CATCHER_Y) {
           const catcherColor = catcherRef.current[ball.lane]
           const delta = scoreForCatch(catcherColor, ball.color)
+          if (delta > 0) {
+            feedback('correct')
+          } else {
+            feedback('wrong')
+          }
           scoreRef.current += delta
           caught.push({
             id: flashIdRef.current++,
@@ -180,7 +192,7 @@ export default function ColorSwitch() {
         {phase === 'countdown' && (
           <div className="panel">
             <p className="panel__label">Get ready</p>
-            <div className="cs-countdown">{timeLeft}</div>
+            <div className="cs-countdown">{countdown}</div>
           </div>
         )}
 

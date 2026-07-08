@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import './PathToSafety.css'
 
 const GRID_SIZE = 8
@@ -129,6 +131,7 @@ export default function PathToSafety() {
   }, [])
 
   const startGame = useCallback(() => {
+    feedback('start')
     setScore(0)
     setLevel(1)
     startLevel(1)
@@ -167,7 +170,9 @@ export default function PathToSafety() {
         setCurrent([r, c])
         setPhase('lost')
         setIsDragging(false)
+        feedback('lose')
         const record = saveBest('path-to-safety', null, level)
+        recordResult('path-to-safety', level)
         if (record) setBest(getBest('path-to-safety'))
         return
       }
@@ -193,7 +198,9 @@ export default function PathToSafety() {
         setScore((s) => s + gained)
         setPhase('won')
         setIsDragging(false)
+        feedback('win')
         const record = saveBest('path-to-safety', null, level + 1)
+        recordResult('path-to-safety', level + 1)
         if (record) setBest(getBest('path-to-safety'))
       }
     },
