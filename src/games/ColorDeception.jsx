@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import './ColorDeception.css'
 
 const ROUND_COUNT = 10
@@ -70,13 +72,16 @@ export default function ColorDeception() {
     setIsRecord(false)
     setTimeLeft(TIME_PER_ROUND)
     setPhase('playing')
+    feedback('start')
   }
 
   const finishGame = useCallback((finalScore) => {
     const record = saveBest('color-deception', null, finalScore)
+    recordResult('color-deception', finalScore)
     setIsRecord(record)
     setBest(getBest('color-deception'))
     setPhase('finished')
+    feedback('win')
   }, [])
 
   const advance = useCallback(() => {
@@ -97,7 +102,12 @@ export default function ColorDeception() {
       const correct = rounds[index].boxes[boxIndex].isDeception
       setSelected(boxIndex)
       setWasCorrect(correct)
-      if (correct) setScore((s) => s + 1)
+      if (correct) {
+        setScore((s) => s + 1)
+        feedback('correct')
+      } else {
+        feedback('wrong')
+      }
       setPhase('feedback')
       setTimeout(advance, 900)
     },
@@ -108,6 +118,7 @@ export default function ColorDeception() {
     if (phase !== 'playing') return
     setSelected(null)
     setWasCorrect(false)
+    feedback('wrong')
     setPhase('feedback')
     setTimeout(advance, 900)
   }, [phase, advance])
