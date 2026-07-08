@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import {
   TOTAL_TRIALS,
   FIXATION_MS,
@@ -31,6 +33,7 @@ export default function GoNoGo() {
   const trial = trials[trialIndex]
 
   const startGame = useCallback(() => {
+    feedback('start')
     const seed = Date.now()
     const newTrials = generateTrials(seed)
     setTrials(newTrials)
@@ -87,6 +90,11 @@ export default function GoNoGo() {
       liveScoreRef.current = newScore
       setLiveScore(newScore)
       setLastOutcome(result.outcome)
+      if (result.outcome === 'hit' || result.outcome === 'correctReject') {
+        feedback('correct')
+      } else {
+        feedback('wrong')
+      }
       setPhase('feedback')
     },
     [trial],
@@ -107,6 +115,8 @@ export default function GoNoGo() {
         const finalStats = computeStats(resultsRef.current)
         setStats(finalStats)
         const record = saveBest('go-no-go', null, finalStats.score)
+        recordResult('go-no-go', finalStats.score)
+        feedback('win')
         setIsRecord(record)
         setBest(getBest('go-no-go'))
         setPhase('finished')
