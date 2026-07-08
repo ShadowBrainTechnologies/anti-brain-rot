@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import {
   START_N,
   ROUND_MS,
@@ -58,18 +60,21 @@ export default function NBack() {
     setHighestN(START_N)
     setCountdownLeft(COUNTDOWN_SECONDS)
     setPhase('countdown')
+    feedback('start')
   }
 
   const continueGame = () => {
     prepareGame(nextN, nextLength)
     setCountdownLeft(COUNTDOWN_SECONDS)
     setPhase('countdown')
+    feedback('start')
   }
 
   const retryGame = () => {
     prepareGame(n, length)
     setCountdownLeft(COUNTDOWN_SECONDS)
     setPhase('countdown')
+    feedback('start')
   }
 
   // Countdown phase.
@@ -139,6 +144,7 @@ export default function NBack() {
     reactionTimesRef.current[roundIndexRef.current] = rt
     setTappedThisRound(true)
     setTapFeedback(expected ? 'correct' : 'wrong')
+    feedback(expected ? 'correct' : 'wrong')
   }
 
   // Compute results when the run ends.
@@ -154,8 +160,10 @@ export default function NBack() {
     const newHighest = Math.max(highestN, upcoming.n)
     setHighestN(newHighest)
     const record = saveBest('n-back', null, newHighest)
+    recordResult('n-back', newHighest)
     setIsRecord(record)
     setBest(getBest('n-back'))
+    feedback(stats.accuracy >= 80 ? 'win' : 'lose')
   }, [phase, sequence, n, length, highestN])
 
   return (
