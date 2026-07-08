@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback as playFeedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import {
   RULE_LABELS,
   DIFFICULTY,
@@ -85,12 +87,15 @@ export default function RuleSwitch() {
   const endGame = () => {
     if (phaseRef.current === 'gameover') return
     const record = saveBest('rule-switch', difficultyRef.current, scoreRef.current)
+    recordResult('rule-switch', scoreRef.current)
     setIsRecord(record)
     setBest(getBest('rule-switch', difficultyRef.current))
     setPhase('gameover')
+    playFeedback('win')
   }
 
   const startGame = () => {
+    playFeedback('start')
     const initialRule = pickRule(difficulty, null)
     setScore(0)
     setTotal(0)
@@ -179,8 +184,10 @@ export default function RuleSwitch() {
       setScore((s) => s + 1)
       setCorrectCount((c) => c + 1)
       setFeedback('success')
+      playFeedback('correct')
     } else {
       setFeedback('error')
+      playFeedback('wrong')
     }
     setQuestionsSinceSwitch((q) => q + 1)
     setPhase('feedback')
