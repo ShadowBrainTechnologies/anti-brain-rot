@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import {
   BASE_HEALTH,
   ASTEROID_HEIGHT,
@@ -54,6 +56,7 @@ export default function TypingAsteroids() {
     setIsRecord(false)
     setTimeLeft(GAME_DURATION)
     setStatus('playing')
+    feedback('start')
   }
 
   useEffect(() => {
@@ -103,9 +106,11 @@ export default function TypingAsteroids() {
 
       if (game.health <= 0 || game.timeLeft <= 0) {
         const record = saveBest('typing-asteroids', difficulty, game.score)
+        recordResult('typing-asteroids', game.score)
         setIsRecord(record)
         setBest(getBest('typing-asteroids', difficulty))
         setStatus('gameover')
+        feedback(game.health <= 0 ? 'lose' : 'win')
         return
       }
 
@@ -136,12 +141,14 @@ export default function TypingAsteroids() {
       game.destroyed += 1
       setInput('')
       setTick((t) => t + 1)
+      feedback('correct')
     } else {
       game.health = Math.max(0, game.health - cfg.wrongDamage)
       setInput('')
       setTick((t) => t + 1)
       setShake(true)
       setTimeout(() => setShake(false), 220)
+      feedback('wrong')
     }
   }
 
