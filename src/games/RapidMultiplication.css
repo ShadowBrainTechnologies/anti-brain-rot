@@ -1,0 +1,54 @@
+@import './game-base.css';
+
+.rm-problem {
+  font-family: var(--mono);
+  font-size: min(72px, 14vw);
+  font-weight: 700;
+  color: var(--text-h);
+  line-height: 1.2;
+  letter-spacing: -1px;
+}
+
+.rm-choices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  width: 100%;
+}
+
+.rm-choice {
+  font: inherit;
+  cursor: pointer;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 22px 10px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 24px;
+  font-weight: 600;
+  transition: transform 0.08s ease, opacity 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.rm-choice:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.rm-choice:disabled {
+  cursor: default;
+}
+
+.rm-choice--correct {
+  border-color: #16a34a;
+  background: rgba(22, 163, 74, 0.12);
+  color: #16a34a;
+}
+
+.rm-choice--wrong {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+}
+
+.rm-choice--faded {
+  opacity: 0.45;
+}
