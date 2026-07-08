@@ -1,0 +1,60 @@
+@import './game-base.css';
+
+.bw-arena {
+  position: relative;
+  width: min(400px, 90vw);
+  height: 300px;
+  margin: 0 auto;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.bw-bird {
+  position: absolute;
+  font-size: 32px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.bw-choices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.bw-choice {
+  padding: 16px 24px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.bw-summary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bw-summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 15px;
+}
+
+.bw-summary__row span:last-child {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--text-h);
+}
