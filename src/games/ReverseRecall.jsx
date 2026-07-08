@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import {
   START_LENGTH,
   GAP_MS,
@@ -70,11 +72,13 @@ export default function ReverseRecall() {
     setRoundsCompleted(0)
     setSubmissions(0)
     setIsRecord(false)
+    feedback('start')
     startRound(1)
   }
 
   const endGame = () => {
     const record = saveBest('reverse-recall', null, maxLengthReached)
+    recordResult('reverse-recall', maxLengthReached)
     setIsRecord(record)
     setBest(getBest('reverse-recall'))
     setPhase('gameover')
@@ -133,10 +137,12 @@ export default function ReverseRecall() {
     if (phase !== 'feedback') return
     const id = setTimeout(() => {
       if (isCorrect) {
+        feedback('win')
         setScore((s) => s + 1)
         setRoundsCompleted((r) => r + 1)
         startRound(level + 1)
       } else {
+        feedback('lose')
         endGame()
       }
     }, 900)
@@ -165,6 +171,7 @@ export default function ReverseRecall() {
         setIsCorrect(correct)
         setSubmissions((s) => s + 1)
         setFlash(correct ? 'success' : 'error')
+        feedback(correct ? 'correct' : 'wrong')
         setPhase('feedback')
       }
     }
@@ -196,6 +203,7 @@ export default function ReverseRecall() {
     setIsCorrect(correct)
     setSubmissions((s) => s + 1)
     setFlash(correct ? 'success' : 'error')
+    feedback(correct ? 'correct' : 'wrong')
     setPhase('feedback')
   }
 
