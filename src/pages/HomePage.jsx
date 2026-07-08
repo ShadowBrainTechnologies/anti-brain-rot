@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { GAME_GROUPS } from '../data/games.js'
+import BrainProfile from '../components/BrainProfile.jsx'
 import './HomePage.css'
 
 export default function HomePage() {
@@ -17,6 +18,8 @@ export default function HomePage() {
           </p>
         </div>
       </section>
+
+      <BrainProfile />
 
       <div className="home__sections">
         {GAME_GROUPS.map((group) => (
