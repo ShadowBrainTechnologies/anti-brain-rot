@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import './NumberMemory.css'
 
 const START_DIGITS = 3
@@ -28,6 +30,7 @@ export default function NumberMemory() {
   const inputRef = useRef(null)
 
   const beginRound = (lvl, d) => {
+    feedback('start')
     setLevel(lvl)
     setDigits(d)
     setTarget(generateNumber(d))
@@ -75,9 +78,13 @@ export default function NumberMemory() {
   const submitGuess = () => {
     if (guess.length === 0) return
     if (guess === target) {
+      feedback('correct')
       setPhase('correct')
     } else {
+      feedback('wrong')
+      feedback('lose')
       const record = saveBest('number-memory', null, level)
+      recordResult('number-memory', level)
       setIsRecord(record)
       setBest(getBest('number-memory'))
       setPhase('gameover')
