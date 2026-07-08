@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import './TapTheColor.css'
 
 const MAX_LEVEL = 10
@@ -55,6 +57,8 @@ export default function TapTheColor() {
 
   const handleGameOver = useCallback(() => {
     const record = saveBest('tap-the-color', null, level)
+    recordResult('tap-the-color', level)
+    feedback('lose')
     setIsRecord(record)
     setBest(getBest('tap-the-color'))
     setPhase('gameover')
@@ -78,6 +82,7 @@ export default function TapTheColor() {
     setLevel(lvl)
     setTimeLeft(MEMORIZE_TIME)
     setPhase('memorize')
+    feedback('start')
   }, [])
 
   const startGame = useCallback(() => {
@@ -90,6 +95,7 @@ export default function TapTheColor() {
       if (phase !== 'recall') return
       setRevealed((prev) => new Set(prev).add(idx))
       if (idx === sequence[currentStep]) {
+        feedback('correct')
         const nextStep = currentStep + 1
         if (nextStep >= sequence.length) {
           setPhase('correct')
@@ -97,6 +103,7 @@ export default function TapTheColor() {
           setCurrentStep(nextStep)
         }
       } else {
+        feedback('wrong')
         setWrongIndex(idx)
         setPhase('wrong')
       }
@@ -137,6 +144,8 @@ export default function TapTheColor() {
     const id = setTimeout(() => {
       if (level >= MAX_LEVEL) {
         const record = saveBest('tap-the-color', null, level)
+        recordResult('tap-the-color', level)
+        feedback('win')
         setIsRecord(record)
         setBest(getBest('tap-the-color'))
         setPhase('finished')
