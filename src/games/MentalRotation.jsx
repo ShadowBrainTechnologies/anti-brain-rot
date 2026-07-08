@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import {
   DIFFICULTY_SETTINGS,
   FEEDBACK_MS,
@@ -70,21 +72,23 @@ export default function MentalRotation() {
     puzzleNumber: 1,
   })
 
-  const endGameFromStats = useCallback((stats) => {
+  const endGameFromStats = useCallback((stats, reason = 'win') => {
     if (feedbackTimerRef.current) {
       clearTimeout(feedbackTimerRef.current)
       feedbackTimerRef.current = null
     }
     const record = saveBest('mental-rotation', null, stats.score)
+    recordResult('mental-rotation', stats.score)
     setBest(getBest('mental-rotation'))
     setIsRecord(record)
     setPhase('gameover')
+    feedback(reason)
   }, [])
 
   const nextPuzzle = useCallback(
     (stats) => {
       if (stats.puzzleNumber >= TOTAL_PUZZLES) {
-        endGameFromStats(stats)
+        endGameFromStats(stats, 'win')
         return
       }
       const newDifficulty = Math.min(2, Math.floor(stats.correctCount / 5))
@@ -132,6 +136,7 @@ export default function MentalRotation() {
     setPuzzle(firstPuzzle)
     setSelectedIndex(null)
     setIsRecord(false)
+    feedback('start')
   }, [])
 
   useEffect(() => {
@@ -141,7 +146,7 @@ export default function MentalRotation() {
       if (remaining <= 0) {
         clearInterval(id)
         setTimeLeft(0)
-        endGameFromStats(statsRef.current)
+        endGameFromStats(statsRef.current, 'lose')
       } else {
         setTimeLeft(remaining)
       }
@@ -154,6 +159,7 @@ export default function MentalRotation() {
       if (phase !== 'playing' || !puzzle) return
       const elapsed = Date.now() - puzzleStartRef.current
       const isCorrect = index === puzzle.correctIndex
+      feedback(isCorrect ? 'correct' : 'wrong')
       const newScore = isCorrect ? score + 1 : score
       const newCorrectCount = isCorrect ? correctCount + 1 : correctCount
       const newAnsweredCount = answeredCount + 1
