@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import {
   DIFFICULTY_SETTINGS,
   FEEDBACK_MS,
@@ -160,12 +162,18 @@ export default function EstimateIt() {
     setQuantityVisible(true)
     setSpeedPhase('ready')
     setPhase('playing')
+    feedback('start')
   }, [difficultyIndex])
 
   const submitAnswer = useCallback(
     (value) => {
       if (!challenge) return
       const res = evaluateRound(challenge, value)
+      if (res.score >= 60) {
+        feedback('correct')
+      } else {
+        feedback('wrong')
+      }
       setResult(res)
       setSessionScore((prev) => {
         const next = prev + res.score
@@ -190,9 +198,11 @@ export default function EstimateIt() {
     const id = setTimeout(() => {
       if (roundIndex + 1 >= ROUNDS) {
         const record = saveBest('estimate-it', null, sessionScoreRef.current)
+        recordResult('estimate-it', sessionScoreRef.current)
         setIsRecord(record)
         setBest(getBest('estimate-it'))
         setPhase('finished')
+        feedback('win')
       } else {
         setRoundIndex((i) => i + 1)
         setInputValue('')
