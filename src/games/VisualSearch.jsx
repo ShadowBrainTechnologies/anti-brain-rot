@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback as playFeedback } from '../lib/feedback.js'
 import {
   DIFFICULTY,
   ROUNDS,
@@ -61,6 +63,7 @@ export default function VisualSearch() {
     setIsRecord(false)
     setCountdown(COUNTDOWN_SECONDS)
     setPhase('countdown')
+    playFeedback('start')
   }, [difficulty])
 
   useEffect(() => {
@@ -93,6 +96,7 @@ export default function VisualSearch() {
       setFeedback(hit ? 'hit' : 'miss')
       setFeedbackPoints(points)
       setPhase('feedback')
+      playFeedback(hit ? 'correct' : 'wrong')
     },
     [clearTimers],
   )
@@ -134,9 +138,11 @@ export default function VisualSearch() {
         const finalStats = computeStats(resultsRef.current)
         setStats(finalStats)
         const record = saveBest('visual-search', difficulty, finalStats.score)
+        recordResult('visual-search', finalStats.score)
         setIsRecord(record)
         setBest(getBest('visual-search', difficulty))
         setPhase('finished')
+        playFeedback('win')
       } else {
         setRoundIndex((i) => i + 1)
         setFeedback(null)
