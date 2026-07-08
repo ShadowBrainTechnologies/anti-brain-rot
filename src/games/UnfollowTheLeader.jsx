@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import {
   START_LENGTH,
   GRID_SIZE,
@@ -35,6 +37,7 @@ export default function UnfollowTheLeader() {
     setTileFlash(null)
     setCountdown(3)
     setPhase('countdown')
+    feedback('start')
   }
 
   const startGame = () => {
@@ -51,6 +54,8 @@ export default function UnfollowTheLeader() {
       null,
       highestSequenceLength(roundsCompleted),
     )
+    recordResult('unfollow-the-leader', highestSequenceLength(roundsCompleted))
+    feedback('lose')
     setIsRecord(record)
     setBest(getBest('unfollow-the-leader'))
     setPhase('gameover')
@@ -112,6 +117,7 @@ export default function UnfollowTheLeader() {
     const reversed = reverseSequence(sequence)
 
     if (index === reversed[playerIndex]) {
+      feedback('correct')
       setCorrectTaps((t) => t + 1)
       setTileFlash({ index, type: 'ok' })
       setActiveTile(index)
@@ -128,6 +134,7 @@ export default function UnfollowTheLeader() {
         })
       }, 250)
     } else {
+      feedback('wrong')
       setTileFlash({ index, type: 'bad' })
       setActiveTile(index)
       setTimeout(() => endGame(), 500)
