@@ -27,6 +27,14 @@ const DIRECTION = {
   'face-identify': 'higher', // total faces correctly identified
   'unfollow-the-leader': 'higher', // longest sequence reversed
   'color-switch': 'higher', // score in 45-second session
+  'follow-the-leader': 'higher', // longest sequence repeated (tiles)
+  'bird-watching': 'higher', // correct counts
+  'missing-pieces': 'higher', // correct identifications
+  rainfall: 'higher', // raindrops caught
+  'rapid-sorting': 'higher', // correct sorts
+  matching: 'higher', // pairs matched
+  'rapid-multiplication': 'higher', // correct answers in a session
+  'sign-solver': 'higher', // correct answers in a session
 }
 
 function fullKey(gameId, difficulty) {
@@ -115,6 +123,22 @@ export function formatBest(gameId, score) {
     return `${score} tiles`
   }
   if (gameId === 'color-switch') {
+    return `${score} pts`
+  }
+  if (gameId === 'follow-the-leader') {
+    return `${score} tiles`
+  }
+  if (gameId === 'matching') {
+    return `${score} pairs`
+  }
+  if (
+    gameId === 'bird-watching' ||
+    gameId === 'missing-pieces' ||
+    gameId === 'rainfall' ||
+    gameId === 'rapid-sorting' ||
+    gameId === 'rapid-multiplication' ||
+    gameId === 'sign-solver'
+  ) {
     return `${score} pts`
   }
   return `Level ${score}`

@@ -25,6 +25,14 @@ import TypingAsteroids from './games/TypingAsteroids.jsx'
 import FaceIdentify from './games/FaceIdentify.jsx'
 import UnfollowTheLeader from './games/UnfollowTheLeader.jsx'
 import ColorSwitch from './games/ColorSwitch.jsx'
+import FollowTheLeader from './games/FollowTheLeader.jsx'
+import BirdWatching from './games/BirdWatching.jsx'
+import MissingPieces from './games/MissingPieces.jsx'
+import Rainfall from './games/Rainfall.jsx'
+import RapidSorting from './games/RapidSorting.jsx'
+import Matching from './games/Matching.jsx'
+import RapidMultiplication from './games/RapidMultiplication.jsx'
+import SignSolver from './games/SignSolver.jsx'
 import { DEFAULT_PATH } from './data/games.js'
 import './App.css'
 
@@ -74,6 +82,14 @@ export default function App() {
             <Route path="/face-identify" element={<FaceIdentify />} />
             <Route path="/unfollow-the-leader" element={<UnfollowTheLeader />} />
             <Route path="/color-switch" element={<ColorSwitch />} />
+            <Route path="/follow-the-leader" element={<FollowTheLeader />} />
+            <Route path="/bird-watching" element={<BirdWatching />} />
+            <Route path="/missing-pieces" element={<MissingPieces />} />
+            <Route path="/rainfall" element={<Rainfall />} />
+            <Route path="/rapid-sorting" element={<RapidSorting />} />
+            <Route path="/matching" element={<Matching />} />
+            <Route path="/rapid-multiplication" element={<RapidMultiplication />} />
+            <Route path="/sign-solver" element={<SignSolver />} />
             <Route path="*" element={<Navigate to={DEFAULT_PATH} replace />} />
           </Routes>
         </main>
@@ -107,5 +123,13 @@ function titleFor(pathname) {
   if (pathname.startsWith('/face-identify')) return 'Face Identify'
   if (pathname.startsWith('/unfollow-the-leader')) return 'Unfollow the Leader'
   if (pathname.startsWith('/color-switch')) return 'Color Switch'
+  if (pathname.startsWith('/follow-the-leader')) return 'Follow the Leader'
+  if (pathname.startsWith('/bird-watching')) return 'Bird Watching'
+  if (pathname.startsWith('/missing-pieces')) return 'Missing Pieces'
+  if (pathname.startsWith('/rainfall')) return 'Rainfall'
+  if (pathname.startsWith('/rapid-sorting')) return 'Rapid Sorting'
+  if (pathname.startsWith('/matching')) return 'Matching'
+  if (pathname.startsWith('/rapid-multiplication')) return 'Rapid Multiplication'
+  if (pathname.startsWith('/sign-solver')) return 'Sign Solver'
   return 'Anti Brain Rot'
 }

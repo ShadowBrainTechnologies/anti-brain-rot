@@ -21,6 +21,14 @@ import TypingAsteroids from '../games/TypingAsteroids.jsx'
 import FaceIdentify from '../games/FaceIdentify.jsx'
 import UnfollowTheLeader from '../games/UnfollowTheLeader.jsx'
 import ColorSwitch from '../games/ColorSwitch.jsx'
+import FollowTheLeader from '../games/FollowTheLeader.jsx'
+import BirdWatching from '../games/BirdWatching.jsx'
+import MissingPieces from '../games/MissingPieces.jsx'
+import Rainfall from '../games/Rainfall.jsx'
+import RapidSorting from '../games/RapidSorting.jsx'
+import Matching from '../games/Matching.jsx'
+import RapidMultiplication from '../games/RapidMultiplication.jsx'
+import SignSolver from '../games/SignSolver.jsx'
 
 // Registry of games grouped by category for the sidebar and home page.
 // Each game: { id, name, description, path, component, group }
@@ -41,6 +49,12 @@ export const GAME_GROUPS = [
         description:
           'Three objects follow a hidden rule. Spot the single object that breaks it.',
         path: '/odd-one-out',
+      },
+      {
+        id: 'rapid-sorting',
+        name: 'Rapid Sorting',
+        description: 'Snap-judge each number above or below the pivot as fast as you can.',
+        path: '/rapid-sorting',
       },
     ],
   },
@@ -89,6 +103,18 @@ export const GAME_GROUPS = [
         description: 'Watch tiles light up in order, then tap them back in reverse.',
         path: '/unfollow-the-leader',
       },
+      {
+        id: 'follow-the-leader',
+        name: 'Follow the Leader',
+        description: 'Watch tiles light up in order, then tap them back in the same order as the sequence grows.',
+        path: '/follow-the-leader',
+      },
+      {
+        id: 'matching',
+        name: 'Matching',
+        description: 'Flip cards two at a time to find every matching pair from memory.',
+        path: '/matching',
+      },
     ],
   },
   {
@@ -111,6 +137,18 @@ export const GAME_GROUPS = [
         description: 'Solve arithmetic problems as fast as you can.',
         path: '/math-speed',
       },
+      {
+        id: 'rapid-multiplication',
+        name: 'Rapid Multiplication',
+        description: 'Blast through times-tables against a 60-second clock.',
+        path: '/rapid-multiplication',
+      },
+      {
+        id: 'sign-solver',
+        name: 'Sign Solver',
+        description: 'Pick the operator that makes each equation true before time runs out.',
+        path: '/sign-solver',
+      },
     ],
   },
   {
@@ -128,6 +166,12 @@ export const GAME_GROUPS = [
         name: 'Color Switch',
         description: 'Toggle lane colors to match falling circles in a 45-second rush.',
         path: '/color-switch',
+      },
+      {
+        id: 'rainfall',
+        name: 'Rainfall',
+        description: 'Tap the raindrops before they hit the ground in a 45-second downpour.',
+        path: '/rainfall',
       },
     ],
   },
@@ -158,6 +202,18 @@ export const GAME_GROUPS = [
         description:
           'Locate the one target symbol hidden among visually similar distractors as fast as you can.',
         path: '/visual-search',
+      },
+      {
+        id: 'bird-watching',
+        name: 'Bird Watching',
+        description: 'A flock flashes for a moment — count how many birds you spotted.',
+        path: '/bird-watching',
+      },
+      {
+        id: 'missing-pieces',
+        name: 'Missing Pieces',
+        description: 'Study the grid, then identify which colored piece went missing.',
+        path: '/missing-pieces',
       },
     ],
   },
@@ -233,6 +289,14 @@ const GAME_COMPONENTS = {
   'face-identify': FaceIdentify,
   'unfollow-the-leader': UnfollowTheLeader,
   'color-switch': ColorSwitch,
+  'follow-the-leader': FollowTheLeader,
+  'bird-watching': BirdWatching,
+  'missing-pieces': MissingPieces,
+  rainfall: Rainfall,
+  'rapid-sorting': RapidSorting,
+  matching: Matching,
+  'rapid-multiplication': RapidMultiplication,
+  'sign-solver': SignSolver,
 }
 
 export const DEFAULT_PATH = '/'
