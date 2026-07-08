@@ -1,0 +1,80 @@
+@import './game-base.css';
+
+.ss-equation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: min(64px, 14vw);
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 8px;
+}
+
+.ss-operand {
+  font-family: var(--mono);
+  min-width: 1.4em;
+  text-align: center;
+}
+
+.ss-gap {
+  color: var(--accent);
+}
+
+.ss-operators {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+}
+
+.ss-btn {
+  font: inherit;
+  font-size: min(32px, 8vw);
+  font-weight: 700;
+  padding: 16px 8px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.08s ease, background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.ss-btn:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+.ss-btn:active {
+  transform: scale(0.96);
+}
+
+.ss-summary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ss-summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 15px;
+}
+
+.ss-summary__row span:last-child {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--text-h);
+}
