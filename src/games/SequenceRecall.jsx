@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { feedback } from '../lib/feedback.js'
+import { recordResult } from '../data/calibration.js'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
 import {
   START_LENGTH,
@@ -27,6 +29,7 @@ export default function SequenceRecall() {
   const currentLength = START_LENGTH + level - 1
 
   const startRound = (nextLevel) => {
+    feedback('start')
     setLevel(nextLevel)
     setSequence(generateSequence(START_LENGTH + nextLevel - 1))
     setPlayerIndex(0)
@@ -50,6 +53,8 @@ export default function SequenceRecall() {
       null,
       highestSequenceLength(roundsCompleted),
     )
+    recordResult('sequence-recall', highestSequenceLength(roundsCompleted))
+    feedback('lose')
     setIsRecord(record)
     setBest(getBest('sequence-recall'))
     setPhase('gameover')
@@ -113,6 +118,7 @@ export default function SequenceRecall() {
     setTotalTaps((t) => t + 1)
 
     if (index === sequence[playerIndex]) {
+      feedback('correct')
       setCorrectTaps((t) => t + 1)
       setTileFlash({ index, type: 'ok' })
       setActiveTile(index)
@@ -129,6 +135,7 @@ export default function SequenceRecall() {
         })
       }, 250)
     } else {
+      feedback('wrong')
       setTileFlash({ index, type: 'bad' })
       setActiveTile(index)
       setTimeout(() => endGame(), 500)
