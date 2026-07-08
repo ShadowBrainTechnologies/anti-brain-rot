@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getBest, saveBest, formatBest } from '../data/scores.js'
+import { recordResult } from '../data/calibration.js'
+import { feedback } from '../lib/feedback.js'
 import {
   PUZZLE_COUNT,
   FEEDBACK_MS,
@@ -62,14 +64,14 @@ export default function OddOneOut() {
   const [responseTimes, setResponseTimes] = useState([])
   const [streak, setStreak] = useState(0)
   const [longestStreak, setLongestStreak] = useState(0)
-  const [feedback, setFeedback] = useState(null)
+  const [answerFeedback, setAnswerFeedback] = useState(null)
   const [best, setBest] = useState(null)
   const [isRecord, setIsRecord] = useState(false)
 
   const phaseRef = useRef(phase)
   const puzzlesRef = useRef(puzzles)
   const roundRef = useRef(round)
-  const feedbackRef = useRef(feedback)
+  const answerFeedbackRef = useRef(answerFeedback)
   const startTimeRef = useRef(null)
   const correctCountRef = useRef(0)
   const streakRef = useRef(0)
@@ -85,8 +87,8 @@ export default function OddOneOut() {
     roundRef.current = round
   }, [round])
   useEffect(() => {
-    feedbackRef.current = feedback
-  }, [feedback])
+    answerFeedbackRef.current = answerFeedback
+  }, [answerFeedback])
 
   useEffect(() => {
     setBest(getBest('odd-one-out', difficulty))
@@ -102,12 +104,15 @@ export default function OddOneOut() {
   const finishGame = () => {
     const final = correctCountRef.current
     const record = saveBest('odd-one-out', difficulty, final)
+    recordResult('odd-one-out', final)
+    feedback('win')
     setIsRecord(record)
     setBest(getBest('odd-one-out', difficulty))
     setPhase('gameover')
   }
 
   const startGame = () => {
+    feedback('start')
     const seed = Math.floor(Math.random() * 0x7fffffff)
     const session = generateSession(difficulty, seed, PUZZLE_COUNT)
 
@@ -117,7 +122,7 @@ export default function OddOneOut() {
     setResponseTimes([])
     setStreak(0)
     setLongestStreak(0)
-    setFeedback(null)
+    setAnswerFeedback(null)
     setIsRecord(false)
     setBest(getBest('odd-one-out', difficulty))
 
@@ -129,7 +134,7 @@ export default function OddOneOut() {
   }
 
   const handleAnswer = (index) => {
-    if (phaseRef.current !== 'playing' || feedbackRef.current) return
+    if (phaseRef.current !== 'playing' || answerFeedbackRef.current) return
 
     const puzzle = puzzlesRef.current[roundRef.current]
     const isCorrect = index === puzzle.answerIndex
@@ -138,6 +143,7 @@ export default function OddOneOut() {
     setResponseTimes((prev) => [...prev, elapsed])
 
     if (isCorrect) {
+      feedback('correct')
       const nextCorrect = correctCountRef.current + 1
       correctCountRef.current = nextCorrect
       setCorrectCount(nextCorrect)
@@ -151,11 +157,12 @@ export default function OddOneOut() {
         setLongestStreak(nextStreak)
       }
     } else {
+      feedback('wrong')
       streakRef.current = 0
       setStreak(0)
     }
 
-    setFeedback({ selectedIndex: index, isCorrect, answerIndex: puzzle.answerIndex })
+    setAnswerFeedback({ selectedIndex: index, isCorrect, answerIndex: puzzle.answerIndex })
     setPhase('feedback')
   }
 
@@ -168,7 +175,7 @@ export default function OddOneOut() {
         finishGame()
       } else {
         setRound(nextRound)
-        setFeedback(null)
+        setAnswerFeedback(null)
         setPhase('playing')
       }
     }, FEEDBACK_MS)
@@ -258,9 +265,9 @@ export default function OddOneOut() {
             <div className="odd-one-out__grid">
               {puzzle.objects.map((object, index) => {
                 let state = null
-                if (feedback) {
-                  if (index === feedback.answerIndex) state = 'correct'
-                  else if (index === feedback.selectedIndex && !feedback.isCorrect) state = 'wrong'
+                if (answerFeedback) {
+                  if (index === answerFeedback.answerIndex) state = 'correct'
+                  else if (index === answerFeedback.selectedIndex && !answerFeedback.isCorrect) state = 'wrong'
                 }
                 return (
                   <button
@@ -272,7 +279,7 @@ export default function OddOneOut() {
                       .filter(Boolean)
                       .join(' ')}
                     onClick={() => handleAnswer(index)}
-                    disabled={!!feedback}
+                    disabled={!!answerFeedback}
                     aria-label={`Object ${index + 1}`}
                   >
                     <ObjectSVG object={object} state={state} />
@@ -281,17 +288,17 @@ export default function OddOneOut() {
               })}
             </div>
 
-            {feedback && (
+            {answerFeedback && (
               <div
                 className={[
                   'odd-one-out__feedback',
-                  feedback.isCorrect && 'odd-one-out__feedback--correct',
-                  !feedback.isCorrect && 'odd-one-out__feedback--wrong',
+                  answerFeedback.isCorrect && 'odd-one-out__feedback--correct',
+                  !answerFeedback.isCorrect && 'odd-one-out__feedback--wrong',
                 ]
                   .filter(Boolean)
                   .join(' ')}
               >
-                {feedback.isCorrect
+                {answerFeedback.isCorrect
                   ? 'Correct!'
                   : `Incorrect — the odd one differs in ${puzzle.ruleName}.`}
               </div>
