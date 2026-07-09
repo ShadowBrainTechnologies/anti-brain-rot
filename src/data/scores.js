@@ -35,6 +35,10 @@ const DIRECTION = {
   matching: 'higher', // pairs matched
   'rapid-multiplication': 'higher', // correct answers in a session
   'sign-solver': 'higher', // correct answers in a session
+  'aptitude-arena': 'higher', // correct answers out of 10
+  sequences: 'higher', // correct answers out of 10
+  deduction: 'higher', // correct answers out of 10
+  'data-detective': 'higher', // correct answers out of 10
 }
 
 function fullKey(gameId, difficulty) {
@@ -130,6 +134,14 @@ export function formatBest(gameId, score) {
   }
   if (gameId === 'matching') {
     return `${score} pairs`
+  }
+  if (
+    gameId === 'aptitude-arena' ||
+    gameId === 'sequences' ||
+    gameId === 'deduction' ||
+    gameId === 'data-detective'
+  ) {
+    return `${score}/10`
   }
   if (
     gameId === 'bird-watching' ||

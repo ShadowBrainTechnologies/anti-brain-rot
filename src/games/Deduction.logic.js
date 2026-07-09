@@ -21,7 +21,9 @@ function makeSyllogismOptions(rng, answerKey) {
 function generateBloodRelation(rng) {
   const variant = randInt(rng, 0, 1)
   const rel1Pool = variant === 0 ? ['father', 'mother'] : ['son', 'daughter']
-  const rel2Pool = ['father', 'mother']
+  // variant 0 walks UP the tree (A→grandparent), variant 1 walks DOWN (A→grandchild),
+  // so rel2 must match the direction: "B is C's son" gives A (B's son) as C's grandson.
+  const rel2Pool = variant === 0 ? ['father', 'mother'] : ['son', 'daughter']
   const rel1 = pick(rng, rel1Pool)
   const rel2 = pick(rng, rel2Pool)
 

@@ -33,6 +33,10 @@ import RapidSorting from './games/RapidSorting.jsx'
 import Matching from './games/Matching.jsx'
 import RapidMultiplication from './games/RapidMultiplication.jsx'
 import SignSolver from './games/SignSolver.jsx'
+import AptitudeArena from './games/AptitudeArena.jsx'
+import Sequences from './games/Sequences.jsx'
+import Deduction from './games/Deduction.jsx'
+import DataDetective from './games/DataDetective.jsx'
 import { DEFAULT_PATH } from './data/games.js'
 import './App.css'
 
@@ -90,6 +94,10 @@ export default function App() {
             <Route path="/matching" element={<Matching />} />
             <Route path="/rapid-multiplication" element={<RapidMultiplication />} />
             <Route path="/sign-solver" element={<SignSolver />} />
+            <Route path="/aptitude-arena" element={<AptitudeArena />} />
+            <Route path="/sequences" element={<Sequences />} />
+            <Route path="/deduction" element={<Deduction />} />
+            <Route path="/data-detective" element={<DataDetective />} />
             <Route path="*" element={<Navigate to={DEFAULT_PATH} replace />} />
           </Routes>
         </main>
@@ -131,5 +139,9 @@ function titleFor(pathname) {
   if (pathname.startsWith('/matching')) return 'Matching'
   if (pathname.startsWith('/rapid-multiplication')) return 'Rapid Multiplication'
   if (pathname.startsWith('/sign-solver')) return 'Sign Solver'
+  if (pathname.startsWith('/aptitude-arena')) return 'Aptitude Arena'
+  if (pathname.startsWith('/sequences')) return 'Sequences & Patterns'
+  if (pathname.startsWith('/deduction')) return 'Deduction'
+  if (pathname.startsWith('/data-detective')) return 'Data Detective'
   return 'Anti Brain Rot'
 }

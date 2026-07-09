@@ -163,7 +163,8 @@ function generateNumberSeries(rng) {
     }
     terms = terms.slice(0, 6)
     const last = terms[terms.length - 1]
-    correct = op1 === '+' ? last + a : last - a
+    // terms[5] was reached via op1 (using a); the next transition is op2 (using b).
+    correct = op2 === '+' ? last + b : last - b
     explanation = `alternating ${op1}${a}, ${op2}${b}`
   }
 
