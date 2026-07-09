@@ -82,6 +82,12 @@ export const GAME_PROFILE = {
   matching: { ceiling: 20, dims: { memory: 0.8, observation: 0.5, speed: 0.3 } },
   'rapid-multiplication': { ceiling: 20, dims: { calculation: 0.9, speed: 0.6, accuracy: 0.5 } },
   'sign-solver': { ceiling: 15, dims: { calculation: 0.8, judgement: 0.6, accuracy: 0.4 } },
+
+  // --- IndiaBix question-bank games (score = correct answers out of 10) ---
+  'aptitude-arena': { ceiling: 10, dims: { calculation: 0.8, reasoning: 0.6, accuracy: 0.4 } },
+  sequences: { ceiling: 10, dims: { reasoning: 0.8, judgement: 0.4, calculation: 0.4, observation: 0.3 } },
+  deduction: { ceiling: 10, dims: { reasoning: 0.9, judgement: 0.6, memory: 0.3 } },
+  'data-detective': { ceiling: 10, dims: { reasoning: 0.6, calculation: 0.6, observation: 0.5 } },
 }
 
 function clamp01(x) {

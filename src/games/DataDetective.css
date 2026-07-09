@@ -1,0 +1,113 @@
+@import './game-base.css';
+
+.dd-prompt {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.dd-chart-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.dd-chart-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.dd-chart {
+  width: 100%;
+  max-width: 440px;
+  height: auto;
+}
+
+.dd-chart--pie {
+  max-width: 260px;
+}
+
+.dd-table {
+  width: 100%;
+  max-width: 440px;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.dd-table th,
+.dd-table td {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.dd-table th {
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.dd-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+}
+
+.dd-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 16px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.dd-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dd-legend__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.dd-prompt__text {
+  width: 100%;
+  margin: 0;
+  text-align: left;
+  color: var(--text-h);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.dd-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
+
+.dd-axis {
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+
+.dd-label {
+  font-size: 11px;
+  fill: var(--text);
+  font-family: var(--mono);
+}
+
+.dd-label--x {
+  text-anchor: middle;
+}
+
+.dd-label--y {
+  text-anchor: end;
+}

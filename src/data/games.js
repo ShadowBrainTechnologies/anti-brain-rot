@@ -29,6 +29,10 @@ import RapidSorting from '../games/RapidSorting.jsx'
 import Matching from '../games/Matching.jsx'
 import RapidMultiplication from '../games/RapidMultiplication.jsx'
 import SignSolver from '../games/SignSolver.jsx'
+import AptitudeArena from '../games/AptitudeArena.jsx'
+import Sequences from '../games/Sequences.jsx'
+import Deduction from '../games/Deduction.jsx'
+import DataDetective from '../games/DataDetective.jsx'
 
 // Registry of games grouped by category for the sidebar and home page.
 // Each game: { id, name, description, path, component, group }
@@ -55,6 +59,20 @@ export const GAME_GROUPS = [
         name: 'Rapid Sorting',
         description: 'Snap-judge each number above or below the pivot as fast as you can.',
         path: '/rapid-sorting',
+      },
+      {
+        id: 'sequences',
+        name: 'Sequences & Patterns',
+        description:
+          'Crack the hidden rule behind number and letter series, analogies, and odd-one-out.',
+        path: '/sequences',
+      },
+      {
+        id: 'data-detective',
+        name: 'Data Detective',
+        description:
+          'Read tables, bar, pie, and line charts and answer the interpretation question.',
+        path: '/data-detective',
       },
     ],
   },
@@ -148,6 +166,13 @@ export const GAME_GROUPS = [
         name: 'Sign Solver',
         description: 'Pick the operator that makes each equation true before time runs out.',
         path: '/sign-solver',
+      },
+      {
+        id: 'aptitude-arena',
+        name: 'Aptitude Arena',
+        description:
+          'Solve aptitude word problems — trains, work, percentages, interest, ratios and more.',
+        path: '/aptitude-arena',
       },
     ],
   },
@@ -261,6 +286,13 @@ export const GAME_GROUPS = [
         description: 'Pick the rotated shape among mirrored and modified decoys.',
         path: '/mental-rotation',
       },
+      {
+        id: 'deduction',
+        name: 'Deduction',
+        description:
+          'Reason it out — blood relations, directions, syllogisms, and argument analysis.',
+        path: '/deduction',
+      },
     ],
   },
 ]
@@ -297,6 +329,10 @@ const GAME_COMPONENTS = {
   matching: Matching,
   'rapid-multiplication': RapidMultiplication,
   'sign-solver': SignSolver,
+  'aptitude-arena': AptitudeArena,
+  sequences: Sequences,
+  deduction: Deduction,
+  'data-detective': DataDetective,
 }
 
 export const DEFAULT_PATH = '/'

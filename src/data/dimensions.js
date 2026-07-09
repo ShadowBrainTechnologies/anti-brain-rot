@@ -51,6 +51,13 @@ export const DIMENSIONS = [
     emoji: '🧩',
     blurb: 'Holding and recalling sequences, positions, and facts.',
   },
+  {
+    id: 'reasoning',
+    label: 'Reasoning',
+    color: '#14b8a6',
+    emoji: '🧠',
+    blurb: 'Deductive and analytical thinking — working through problems step by step.',
+  },
 ]
 
 export const DIMENSION_IDS = DIMENSIONS.map((d) => d.id)
