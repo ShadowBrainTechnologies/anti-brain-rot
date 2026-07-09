@@ -19,7 +19,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <BrainProfile />
+      <div className="home__profile">
+        <BrainProfile />
+      </div>
 
       <div className="home__sections">
         {GAME_GROUPS.map((group) => (

@@ -35,6 +35,12 @@
   margin: 0;
 }
 
+.home__profile {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
 .home__sections {
   max-width: 1100px;
   margin: 0 auto;
@@ -130,6 +136,10 @@
 
   .home__hero-subtitle {
     font-size: 16px;
+  }
+
+  .home__profile {
+    padding: 0 16px;
   }
 
   .home__sections {

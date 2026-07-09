@@ -228,11 +228,19 @@ function generateLetterSeries(rng) {
 
 function generateWordAnalogy(rng) {
   const pair = pick(rng, ANALOGY_BANK)
-  const otherPairs = ANALOGY_BANK.filter((p) => p.b !== pair.b && p.a !== pair.a)
-  const prompt = `${pair.a} : ${pair.b} :: ___ : ?`
-  const correct = pair.b
-  const explanation = `${pair.a} relates to ${pair.b} as ${pair.relation}.`
-  const distractors = shuffle(rng, otherPairs)
+  // Complete the analogy with a second, distinct pair sharing the same relation:
+  // A : B :: C : ? where ? is that pair's B. Every relation has ≥2 pairs, but keep
+  // a fallback just in case.
+  const sameRelation = ANALOGY_BANK.filter(
+    (p) => p.relation === pair.relation && p.a !== pair.a && p.b !== pair.b,
+  )
+  const second = sameRelation.length
+    ? pick(rng, sameRelation)
+    : pick(rng, ANALOGY_BANK.filter((p) => p.b !== pair.b))
+  const prompt = `${pair.a} : ${pair.b} :: ${second.a} : ?`
+  const correct = second.b
+  const explanation = `${pair.a} is to ${pair.b} as ${second.a} is to ${second.b} (${pair.relation}).`
+  const distractors = shuffle(rng, ANALOGY_BANK.filter((p) => p.b !== correct && p.b !== pair.b))
     .slice(0, 6)
     .map((p) => p.b)
   const { options, correctIndex } = buildChoices(rng, correct, distractors, 4)
