@@ -1,0 +1,17 @@
+{
+  "name": "anti-brain-rot-instagram",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "post": "node src/post.js",
+    "post:dry": "DRY_RUN=1 node src/post.js",
+    "schedule": "node src/schedule.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "instagram-private-api": "^1.46.0",
+    "node-cron": "^3.0.3",
+    "sharp": "^0.33.5"
+  }
+}

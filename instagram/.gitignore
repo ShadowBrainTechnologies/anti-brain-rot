@@ -1,0 +1,4 @@
+node_modules/
+.env
+.ig-session.json
+output/
